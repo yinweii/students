@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:students/screens/class/class_screen.dart';
 
 import 'package:students/screens/dashboard/dashboard_screen.dart';
 
@@ -6,16 +7,18 @@ import 'package:students/screens/dashboard/dashboard_screen.dart';
 /// navigation in a Flutter app.
 class Routes {
   static const dashboardScreen = '/dashboard_screen';
+  static const classScreen = '/class_screen';
 
   static final Map<String, WidgetBuilder> routes = {
     '/': (context) => defaultRoute(),
     dashboardScreen: (context) => const DashBoardScreen(),
+    classScreen: (context) => const ClassScreen(),
   };
 
-  static defaultRoute() => Scaffold(
+  static defaultRoute() => const Scaffold(
         body: Column(
           mainAxisAlignment: MainAxisAlignment.center,
-          children: const [
+          children: [
             Center(
               child: Text(
                 'Sorry for the unexpected problem !',
