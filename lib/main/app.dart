@@ -40,11 +40,11 @@ class App extends ConsumerWidget {
       theme: ThemeData(
         primarySwatch: Colors.blue,
         scaffoldBackgroundColor: Colors.white,
-        appBarTheme: const AppBarTheme(
-          elevation: 0,
-          iconTheme: IconThemeData(color: Colors.black),
-          color: AppColors.backGround, //<-- SEE HERE
-        ),
+        // appBarTheme: const AppBarTheme(
+        //   elevation: 0,
+        //   iconTheme: IconThemeData(color: Colors.black),
+        //   //<-- SEE HERE
+        // ),
       ),
       debugShowCheckedModeBanner: false,
       initialRoute: Routes.dashboardScreen,

@@ -48,8 +48,8 @@ app.*.map.json
 lib/**/*.freezed.dart
 lib/**/*.g.dart
 lib/generated/assets.gen.dart
-lib/generated/intl 
-lib/generated/l10n.dart 
+lib/generated/intl
+lib/generated/l10n.dart
 pubspec.lock
 ios/Podfile.lock
 Gemfile.lock

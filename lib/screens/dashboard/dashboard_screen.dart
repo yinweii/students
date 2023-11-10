@@ -8,6 +8,7 @@ import 'package:students/generated/assets.gen.dart';
 
 import 'package:students/screens/dashboard/dashboard_state_notifier.dart';
 import 'package:students/screens/home/home_screen.dart';
+import 'package:students/screens/profile/profile_screen.dart';
 
 import 'package:students/utils/app_colors.dart';
 import 'package:students/utils/utils.dart';
@@ -31,16 +32,12 @@ class _DashBoardScreenState extends ConsumerState<DashBoardScreen>
     with TickerProviderStateMixin, Utils, WidgetsBindingObserver {
   static const List<DashboardItem> tabTypes = [
     DashboardItem.home,
-    DashboardItem.hour,
-    DashboardItem.profile,
+    DashboardItem.checkIn,
   ];
   late TabController _tabController;
 
   // 3 Pages in dashboard
-  static const pages = [
-    HomeScreen(),
-    
-  ];
+  static const pages = [HomeScreen(), ProfileScreen()];
 
   final List<GlobalKey<NavigatorState>> _tabNavKeyList =
       List.generate(tabTypes.length, (index) => index)
@@ -51,7 +48,7 @@ class _DashBoardScreenState extends ConsumerState<DashBoardScreen>
   void initState() {
     super.initState();
     _tabController =
-        TabController(length: 3, vsync: this, initialIndex: widget.index ?? 0);
+        TabController(length: 2, vsync: this, initialIndex: widget.index ?? 0);
     WidgetsBinding.instance.addObserver(this);
   }
 
@@ -81,17 +78,11 @@ class _DashBoardScreenState extends ConsumerState<DashBoardScreen>
               title: 'Home',
             ),
             TabItem(
-                icon: SvgPicture.asset(
-                  Assets.svg.icHourGlass.path,
-                  color: Colors.red[200],
-                ),
-                title: 'Time'),
-            TabItem(
               icon: SvgPicture.asset(
                 Assets.svg.icProfile.path,
                 color: Colors.red[200],
               ),
-              title: 'Profile',
+              title: 'Check-in',
             ),
           ],
           onTap: _onTapItem,

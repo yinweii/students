@@ -9,8 +9,7 @@ final dashboardNotifierProvider =
 
 enum DashboardItem {
   home,
-  hour,
-  profile,
+  checkIn,
 }
 
 typedef RefreshListener = Future<void> Function();

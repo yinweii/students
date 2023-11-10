@@ -10,6 +10,6 @@
 #include "Generated.xcconfig"
 
 FLUTTER_FLAVOR=development
-PRODUCT_BUNDLE_IDENTIFIER=com.htp.mywise.dev
-DISPLAY_NAME=DEV My Wise
+PRODUCT_BUNDLE_IDENTIFIER=com.htp.students.dev
+DISPLAY_NAME=DEV Students
 FLUTTER_TARGET=lib/main/main_development.dart
