@@ -48,7 +48,7 @@ class App extends ConsumerWidget {
         ),
       ),
       debugShowCheckedModeBanner: false,
-      initialRoute: Routes.dashboardScreen,
+      initialRoute: Routes.homeScreen,
       routes: Routes.routes,
       localizationsDelegates: const [],
       navigatorObservers: const [],

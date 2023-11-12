@@ -34,7 +34,8 @@ class CommonButton extends StatelessWidget {
           onPressed: onTap,
           child: Text(
             label ?? '',
-            style: AppTextStyles.defaultMedium.copyWith(color: AppColors.white),
+            style: AppTextStyles.defaultBold
+                .copyWith(color: AppColors.white, fontSize: 18),
           ),
         ),
       ),

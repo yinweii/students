@@ -4,7 +4,7 @@ import 'package:students/utils/app_text_style.dart';
 
 class TextFormFieldCustom extends StatelessWidget {
   const TextFormFieldCustom({
-    Key? key,
+    super.key,
     required this.controller,
     this.textInputAction = TextInputAction.done,
     this.keyboardType = TextInputType.text,
@@ -13,7 +13,8 @@ class TextFormFieldCustom extends StatelessWidget {
     this.onEditingComplete,
     this.obscureText = false,
     this.hintText,
-  }) : super(key: key);
+    this.maxLines
+  });
   final TextEditingController controller;
   final TextInputAction? textInputAction;
   final TextInputType? keyboardType;
@@ -22,6 +23,7 @@ class TextFormFieldCustom extends StatelessWidget {
   final VoidCallback? onEditingComplete;
   final bool obscureText;
   final String? hintText;
+  final int? maxLines;
   @override
   Widget build(BuildContext context) {
     return TextFormField(
@@ -29,6 +31,7 @@ class TextFormFieldCustom extends StatelessWidget {
       controller: controller,
       textInputAction: textInputAction,
       keyboardType: keyboardType,
+      maxLines: maxLines,
       style: AppTextStyles.defaultMedium.copyWith(
         color: AppColors.black1,
         fontWeight: FontWeight.w500,

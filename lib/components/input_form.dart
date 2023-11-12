@@ -24,7 +24,7 @@ class FormInputField extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Column(
-      crossAxisAlignment: CrossAxisAlignment.stretch,
+      crossAxisAlignment: CrossAxisAlignment.start,
       children: [
         _buildLabel(requiredType),
         const SizedBox(
@@ -55,8 +55,10 @@ class FormInputField extends StatelessWidget {
     return Text(
       label ?? '',
       style: labelStyle ??
-          AppTextStyles.defaultBold.copyWith(
+          AppTextStyles.defaultMedium.copyWith(
             fontSize: AppTextStyles.fontSize_14,
+            fontWeight: FontWeight.w600,
+            
           ),
     );
   }
