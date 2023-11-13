@@ -31,6 +31,44 @@ class Category {
 }
 
 List<Category> listCategory = [
+  // Category(
+  //   name: 'Điểm danh',
+  //   icon: Assets.svg.icCheckIn.path,
+  //   color: AppColors.bgNav,
+  //   type: CategoryType.checkIn,
+  // ),
+  Category(
+    name: 'Danh sách',
+    icon: Assets.svg.icCheckList.path,
+    color: AppColors.purpleB299F2,
+    type: CategoryType.checkList,
+  ),
+  Category(
+      name: 'Thông tin học sinh',
+      icon: Assets.svg.icUserInfo.path,
+      color: AppColors.blueAFE1F2,
+      type: CategoryType.userInfo),
+  // Category(
+  //   name: 'Lớp của tôi',
+  //   icon: Assets.svg.icMyClass.path,
+  //   color: AppColors.orangeEFD19B,
+  //   type: CategoryType.myClass,
+  // ),
+  // Category(
+  //   name: 'Xin nghỉ',
+  //   icon: Assets.svg.icDayOff.path,
+  //   color: AppColors.melonColor,
+  //   type: CategoryType.dayOff,
+  // ),
+  Category(
+    name: 'Báo cáo',
+    icon: Assets.svg.icReport.path,
+    color: AppColors.bgNav,
+    type: CategoryType.report,
+  ),
+];
+
+List<Category> lsOtherClass = [
   Category(
     name: 'Điểm danh',
     icon: Assets.svg.icCheckIn.path,
@@ -44,27 +82,10 @@ List<Category> listCategory = [
     type: CategoryType.checkList,
   ),
   Category(
-      name: 'Thông tin học sinh',
-      icon: Assets.svg.icUserInfo.path,
-      color: AppColors.blueAFE1F2,
-      type: CategoryType.userInfo),
-  Category(
-    name: 'Lớp của tôi',
-    icon: Assets.svg.icMyClass.path,
-    color: AppColors.orangeEFD19B,
-    type: CategoryType.myClass,
-  ),
-  Category(
-    name: 'Xin nghỉ',
-    icon: Assets.svg.icDayOff.path,
-    color: AppColors.melonColor,
-    type: CategoryType.dayOff,
-  ),
-  Category(
-    name: 'Báo cáo',
-    icon: Assets.svg.icReport.path,
-    color: AppColors.bgNav,
-    type: CategoryType.report,
+    name: 'Thông tin học sinh',
+    icon: Assets.svg.icUserInfo.path,
+    color: AppColors.blueAFE1F2,
+    type: CategoryType.userInfo,
   ),
 ];
 
