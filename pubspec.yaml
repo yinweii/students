@@ -53,6 +53,7 @@ dependencies:
   dotted_border: ^2.1.0
   flutter_typeahead: ^4.8.0
   dropdown_button2: ^2.3.9
+  percent_indicator: 4.2.3
 
 dev_dependencies:
   flutter_test:
