@@ -1,8 +1,11 @@
 import 'dart:developer';
 
-import 'package:flutter/gestures.dart';
+import 'package:dotted_border/dotted_border.dart';
+
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:flutter_svg/svg.dart';
+import 'package:students/generated/assets.gen.dart';
 
 import 'package:students/models/category.dart';
 import 'package:students/screens/class_list/class_list_screen.dart';
@@ -12,6 +15,7 @@ import 'package:students/screens/home/components/category_item.dart';
 import 'package:students/screens/home/home_state_nofitier.dart';
 import 'package:students/student_attendance/students_attendance_screen.dart';
 import 'package:students/utils/app_colors.dart';
+import 'package:students/utils/app_text_style.dart';
 
 import 'package:students/utils/utils.dart';
 
@@ -139,42 +143,112 @@ class _HomeScreenState extends ConsumerState<HomeScreen>
                     margin: EdgeInsets.only(top: screenHeight(context) * 0.3),
                     height: double.infinity,
                     padding: const EdgeInsets.symmetric(horizontal: 16),
-                    child: GridView.count(
-                      physics: const NeverScrollableScrollPhysics(),
-                      crossAxisCount: 3,
-                      mainAxisSpacing: 30,
-                      crossAxisSpacing: 10,
-                      childAspectRatio: 0.86,
-                      shrinkWrap: true,
-                      children: listCategory
-                          .map(
-                            (item) => GestureDetector(
-                              onTap: () => _handleOnTap(item.type),
-                              child: CategoryItem(category: item),
+                    child: Column(
+                      children: [
+                        GridView.count(
+                          physics: const NeverScrollableScrollPhysics(),
+                          crossAxisCount: 3,
+                          mainAxisSpacing: 30,
+                          crossAxisSpacing: 10,
+                          childAspectRatio: 0.86,
+                          shrinkWrap: true,
+                          children: listCategory
+                              .map(
+                                (item) => GestureDetector(
+                                  onTap: () => _handleOnTap(item.type),
+                                  child: CategoryItem(category: item),
+                                ),
+                              )
+                              .toList(),
+                        ),
+                        GestureDetector(
+                          onTap: () =>
+                              push(context, const CreateStudentScreen()),
+                          child: DottedBorder(
+                            borderType: BorderType.RRect,
+                            radius: const Radius.circular(12),
+                            padding: const EdgeInsets.all(6),
+                            child: ClipRRect(
+                              borderRadius:
+                                  const BorderRadius.all(Radius.circular(12)),
+                              child: SizedBox(
+                                height: 56,
+                                width: screenWidth(context),
+                                child: Row(
+                                  mainAxisAlignment: MainAxisAlignment.center,
+                                  children: [
+                                    SvgPicture.asset(
+                                      Assets.svg.icPlus.path,
+                                      height: 25,
+                                    ),
+                                    const SizedBox(width: 8),
+                                    Text(
+                                      'Thêm học sinh mới',
+                                      style: AppTextStyles.defaultBold,
+                                    )
+                                  ],
+                                ),
+                              ),
                             ),
-                          )
-                          .toList(),
+                          ),
+                        ),
+                      ],
                     ),
                   ),
                   Container(
                     margin: EdgeInsets.only(top: screenHeight(context) * 0.3),
                     height: double.infinity,
                     padding: const EdgeInsets.symmetric(horizontal: 16),
-                    child: GridView.count(
-                      physics: const NeverScrollableScrollPhysics(),
-                      crossAxisCount: 3,
-                      mainAxisSpacing: 30,
-                      crossAxisSpacing: 10,
-                      childAspectRatio: 0.86,
-                      shrinkWrap: true,
-                      children: lsOtherClass
-                          .map(
-                            (item) => GestureDetector(
-                              onTap: () => _handleOnTap(item.type),
-                              child: CategoryItem(category: item),
+                    child: Column(
+                      children: [
+                        GridView.count(
+                          physics: const NeverScrollableScrollPhysics(),
+                          crossAxisCount: 3,
+                          mainAxisSpacing: 30,
+                          crossAxisSpacing: 10,
+                          childAspectRatio: 0.86,
+                          shrinkWrap: true,
+                          children: lsOtherClass
+                              .map(
+                                (item) => GestureDetector(
+                                  onTap: () => _handleOnTap(item.type),
+                                  child: CategoryItem(category: item),
+                                ),
+                              )
+                              .toList(),
+                        ),
+                        GestureDetector(
+                          onTap: () =>
+                              push(context, const CreateStudentScreen()),
+                          child: DottedBorder(
+                            borderType: BorderType.RRect,
+                            radius: const Radius.circular(12),
+                            padding: const EdgeInsets.all(6),
+                            child: ClipRRect(
+                              borderRadius:
+                                  const BorderRadius.all(Radius.circular(12)),
+                              child: SizedBox(
+                                height: 56,
+                                width: screenWidth(context),
+                                child: Row(
+                                  mainAxisAlignment: MainAxisAlignment.center,
+                                  children: [
+                                    SvgPicture.asset(
+                                      Assets.svg.icPlus.path,
+                                      height: 25,
+                                    ),
+                                    const SizedBox(width: 8),
+                                    Text(
+                                      'Thêm học sinh mới',
+                                      style: AppTextStyles.defaultBold,
+                                    )
+                                  ],
+                                ),
+                              ),
                             ),
-                          )
-                          .toList(),
+                          ),
+                        ),
+                      ],
                     ),
                   ),
                 ],

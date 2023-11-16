@@ -5,19 +5,64 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:students/screens/student_list/student_list_screen.dart';
 import 'package:students/utils/app_colors.dart';
 import 'package:students/utils/app_text_style.dart';
+import 'package:students/utils/dialog.dart';
 import 'package:students/utils/utils.dart';
 
-class ClassListScreen extends ConsumerWidget with Utils {
+class ClassListScreen extends ConsumerStatefulWidget {
   const ClassListScreen({super.key});
 
   @override
-  Widget build(BuildContext context, WidgetRef ref) {
+  ConsumerState<ConsumerStatefulWidget> createState() =>
+      _ClassListScreenState();
+}
+
+class _ClassListScreenState extends ConsumerState<ClassListScreen> with Utils {
+  late TextEditingController classNameController;
+  late TextEditingController numberController;
+  @override
+  void initState() {
+    // TODO: implement initState
+    super.initState();
+    classNameController = TextEditingController();
+    numberController = TextEditingController();
+  }
+
+  @override
+  void dispose() {
+    // TODO: implement dispose
+    super.dispose();
+    classNameController
+      ..clear()
+      ..dispose();
+    numberController
+      ..clear()
+      ..dispose();
+  }
+
+  @override
+  Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
         title: Text(
           'Danh sách lớp',
           style: AppTextStyles.defaultBold,
         ),
+        actions: [
+          Padding(
+            padding: const EdgeInsets.all(8.0),
+            child: GestureDetector(
+              onTap: () async {
+                final result = await ShowSimpleDialog.displayTextInputDialog(
+                  context,
+                  classNameController: classNameController,
+                  numberController: numberController,
+                );
+                print(result.toString());
+              },
+              child: const Icon(Icons.add),
+            ),
+          ),
+        ],
       ),
       body: Column(
         crossAxisAlignment: CrossAxisAlignment.start,

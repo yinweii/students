@@ -1,5 +1,7 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:students/components/common_button.dart';
+import 'package:students/models/class_model.dart';
 import 'package:students/utils/app_text_style.dart';
 import 'package:students/utils/utils.dart';
 
@@ -264,5 +266,72 @@ class ShowSimpleDialog with Utils {
             ),
           );
         });
+  }
+
+  static Future<Class?> displayTextInputDialog(
+    BuildContext context, {
+    required TextEditingController classNameController,
+    required TextEditingController numberController,
+  }) async {
+    final result = await showDialog<Class>(
+      context: context,
+      builder: (context) {
+        return AlertDialog(
+          title: const Text('Thông tin lớp học'),
+          content: SizedBox(
+            height: 150,
+            child: Column(
+              children: [
+                Expanded(
+                  child: TextField(
+                    onChanged: (value) {},
+                    controller: classNameController,
+                    decoration: const InputDecoration(hintText: "Tên lớp học"),
+                  ),
+                ),
+                TextField(
+                  onChanged: (value) {},
+                  controller: numberController,
+                  decoration: const InputDecoration(
+                    hintText: "Sĩ số",
+                  ),
+                  keyboardType: TextInputType.number,
+                ),
+                const SizedBox(height: 34),
+                Row(
+                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                  children: [
+                    CommonButton(
+                      label: 'Cancel',
+                      height: 45,
+                      onTap: () {
+                        Navigator.of(context).pop();
+                      },
+                    ),
+                    CommonButton(
+                      label: 'OK',
+                      height: 45,
+                      onTap: () {
+                        final result = Class(
+                          className: classNameController.text,
+                          number: int.parse(numberController.text),
+                          updateAt: DateTime.now().toString(),
+                        );
+                        classNameController.clear();
+                        numberController.clear();
+                        Navigator.of(context).pop(result);
+                      },
+                    )
+                  ],
+                )
+              ],
+            ),
+          ),
+          // buttonPadding: const EdgeInsets.all(16),
+          // actions: const <Widget>[],
+        );
+      },
+    );
+    return result;
   }
 }

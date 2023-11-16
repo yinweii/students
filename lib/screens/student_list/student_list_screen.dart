@@ -1,7 +1,11 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:flutter_svg/svg.dart';
 import 'package:percent_indicator/linear_percent_indicator.dart';
 import 'package:students/components/common_button.dart';
+import 'package:students/generated/assets.gen.dart';
+import 'package:students/screens/create_student/create_student.dart';
+import 'package:students/screens/student_detail/student_detail.dart';
 import 'package:students/screens/student_list/components/point_form.dart';
 import 'package:students/screens/student_list/components/search_student.dart';
 import 'package:students/utils/app_colors.dart';
@@ -34,14 +38,6 @@ class StudentListScreen extends ConsumerWidget with Utils {
           ),
         ],
       ),
-      bottomNavigationBar: Padding(
-        padding: const EdgeInsets.symmetric(vertical: 16, horizontal: 16),
-        child: CommonButton(
-          label: 'Thêm học sinh',
-          height: 56,
-          onTap: () {},
-        ),
-      ),
       body: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
@@ -51,7 +47,7 @@ class StudentListScreen extends ConsumerWidget with Utils {
               shrinkWrap: true,
               itemBuilder: (context, index) {
                 return GestureDetector(
-                  onTap: () {},
+                  onTap: () => push(context, const StudentDetailScreen()),
                   child: Container(
                     margin: const EdgeInsets.all(8),
                     height: screenHeight(context) * 0.12,
@@ -90,10 +86,20 @@ class StudentListScreen extends ConsumerWidget with Utils {
                                           children: [
                                             Expanded(
                                               flex: 2,
-                                              child: Text(
-                                                'Nguyễn Văn A',
-                                                style:
-                                                    AppTextStyles.defaultBold,
+                                              child: Row(
+                                                children: [
+                                                  Text(
+                                                    'Nguyễn Văn A',
+                                                    style: AppTextStyles
+                                                        .defaultBold,
+                                                  ),
+                                                  const SizedBox(width: 6),
+                                                  SvgPicture.asset(
+                                                    Assets.svg.icMale.path,
+                                                    width: 16,
+                                                    height: 16,
+                                                  ),
+                                                ],
                                               ),
                                             ),
                                             const SizedBox(
