@@ -2,24 +2,18 @@ import 'package:dotted_border/dotted_border.dart';
 import 'package:dropdown_button2/dropdown_button2.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:students/components/common_appbar.dart';
 import 'package:students/components/common_button.dart';
 import 'package:students/components/input_form.dart';
 import 'package:students/components/text_form_field.dart';
+import 'package:students/models/class_model.dart';
 import 'package:students/utils/app_colors.dart';
 import 'package:students/utils/app_text_style.dart';
+import 'package:students/utils/date_time_util.dart';
 import 'package:students/utils/utils.dart';
+import 'package:flutter_rounded_date_picker/flutter_rounded_date_picker.dart';
 
 enum Gender { male, female }
-
-final List<String> itemsClass = [
-  'Lớp học 1',
-  'Lớp học 2',
-  'Lớp học 3',
-  'Lớp học 4',
-  'Lớp học 5',
-  'Lớp học 6',
-  'Lớp học 7',
-];
 
 class CreateStudentScreen extends ConsumerStatefulWidget {
   const CreateStudentScreen({super.key});
@@ -32,16 +26,48 @@ class CreateStudentScreen extends ConsumerStatefulWidget {
 class _CreateStudentScreenState extends ConsumerState<CreateStudentScreen>
     with Utils {
   Gender? _selected = Gender.male;
-  String? selectedValue;
-  String? classType;
+  Class? selectedValue;
+  String? classType = 'Chính Quy';
+  DateTime? selectDatetime;
+  late TextEditingController _nameController;
+  late TextEditingController _phoneNumberController;
+  late TextEditingController _emailController;
+  late TextEditingController _addressController;
+  late TextEditingController _nameOfContractController;
+  late TextEditingController _phoneOfContractController;
+  late TextEditingController _emailOfContractController;
+
+  @override
+  void initState() {
+    // TODO: implement initState
+    super.initState();
+    _nameController = TextEditingController();
+    _phoneNumberController = TextEditingController();
+    _emailController = TextEditingController();
+    _addressController = TextEditingController();
+    _nameOfContractController = TextEditingController();
+    _phoneOfContractController = TextEditingController();
+    _emailOfContractController = TextEditingController();
+  }
+
+  @override
+  void dispose() {
+    super.dispose();
+    _nameController.dispose();
+    _phoneNumberController.dispose();
+    _emailController.dispose();
+    _addressController.dispose();
+    _nameOfContractController.dispose();
+    _phoneOfContractController.dispose();
+    _emailOfContractController.dispose();
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(
-        title: Text(
-          'Thông tin học sinh',
-          style: AppTextStyles.defaultMedium,
-        ),
+      appBar: CommonAppbar(
+        title: 'Thông tin học sinh',
+       showBackButton: true,
       ),
       bottomNavigationBar: Padding(
         padding: const EdgeInsets.all(16).copyWith(bottom: 24),
@@ -85,13 +111,12 @@ class _CreateStudentScreenState extends ConsumerState<CreateStudentScreen>
                                 value: item,
                                 child: Text(
                                   item,
-                                  style: const TextStyle(
-                                    fontSize: 14,
-                                  ),
+                                  style: AppTextStyles.defaultBold,
+                                  overflow: TextOverflow.ellipsis,
                                 ),
                               ))
                           .toList(),
-                      value: classType,
+                      value: classType ?? 'Chính Quy',
                       onChanged: (String? value) {
                         setState(() {
                           classType = value;
@@ -120,7 +145,7 @@ class _CreateStudentScreenState extends ConsumerState<CreateStudentScreen>
                     ),
                   ),
                   child: DropdownButtonHideUnderline(
-                    child: DropdownButton2<String>(
+                    child: DropdownButton2<Class>(
                       isExpanded: true,
                       hint: Row(
                         children: [
@@ -136,11 +161,11 @@ class _CreateStudentScreenState extends ConsumerState<CreateStudentScreen>
                           ),
                         ],
                       ),
-                      items: itemsClass
-                          .map((String item) => DropdownMenuItem<String>(
+                      items: classesDumpy
+                          .map((Class item) => DropdownMenuItem<Class>(
                                 value: item,
                                 child: Text(
-                                  item,
+                                  item.className ?? '',
                                   style: AppTextStyles.defaultBold,
                                   overflow: TextOverflow.ellipsis,
                                 ),
@@ -190,7 +215,7 @@ class _CreateStudentScreenState extends ConsumerState<CreateStudentScreen>
               inputWidget: SizedBox(
                 height: 54,
                 child: TextFormFieldCustom(
-                  controller: TextEditingController(),
+                  controller: _nameController,
                 ),
               ),
             ),
@@ -209,12 +234,30 @@ class _CreateStudentScreenState extends ConsumerState<CreateStudentScreen>
                             border: Border.all(color: Colors.grey),
                           ),
                           height: 54,
-                          child: const Row(
-                            mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                            children: [
-                              Text('dd/mm/yyyy'),
-                              Icon(Icons.date_range)
-                            ],
+                          child: GestureDetector(
+                            onTap: () async {
+                              final newDateTime = await showRoundedDatePicker(
+                                height: screenHeight(context) * 0.36,
+                                context: context,
+                                initialDate: DateTime.now(),
+                                firstDate: DateTime(DateTime.now().year - 50),
+                                lastDate: DateTime(DateTime.now().year + 1),
+                                borderRadius: 16,
+                              );
+                              setState(() {
+                                selectDatetime = newDateTime;
+                              });
+                            },
+                            child: Row(
+                              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                              children: [
+                                Text(selectDatetime == null
+                                    ? 'yyyy-MM-dd'
+                                    : DateTimeUtil.updateTime(
+                                        selectDatetime.toString())),
+                                const Icon(Icons.date_range)
+                              ],
+                            ),
                           )),
                     ),
                   ),
@@ -287,7 +330,7 @@ class _CreateStudentScreenState extends ConsumerState<CreateStudentScreen>
               inputWidget: SizedBox(
                 height: 54,
                 child: TextFormFieldCustom(
-                  controller: TextEditingController(),
+                  controller: _phoneNumberController,
                 ),
               ),
             ),
@@ -296,7 +339,7 @@ class _CreateStudentScreenState extends ConsumerState<CreateStudentScreen>
               inputWidget: SizedBox(
                 height: 54,
                 child: TextFormFieldCustom(
-                  controller: TextEditingController(),
+                  controller: _emailController,
                 ),
               ),
             ),
@@ -305,7 +348,7 @@ class _CreateStudentScreenState extends ConsumerState<CreateStudentScreen>
               inputWidget: SizedBox(
                 child: TextFormFieldCustom(
                   maxLines: 3,
-                  controller: TextEditingController(),
+                  controller: _addressController,
                 ),
               ),
             ),
@@ -318,7 +361,7 @@ class _CreateStudentScreenState extends ConsumerState<CreateStudentScreen>
               inputWidget: SizedBox(
                 height: 54,
                 child: TextFormFieldCustom(
-                  controller: TextEditingController(),
+                  controller: _nameOfContractController,
                 ),
               ),
             ),
@@ -327,7 +370,7 @@ class _CreateStudentScreenState extends ConsumerState<CreateStudentScreen>
               inputWidget: SizedBox(
                 height: 54,
                 child: TextFormFieldCustom(
-                  controller: TextEditingController(),
+                  controller: _phoneOfContractController,
                 ),
               ),
             ),
@@ -336,7 +379,7 @@ class _CreateStudentScreenState extends ConsumerState<CreateStudentScreen>
               inputWidget: SizedBox(
                 height: 54,
                 child: TextFormFieldCustom(
-                  controller: TextEditingController(),
+                  controller: _emailOfContractController,
                 ),
               ),
             ),

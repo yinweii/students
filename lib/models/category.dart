@@ -60,21 +60,15 @@ List<Category> listCategory = [
   //   color: AppColors.melonColor,
   //   type: CategoryType.dayOff,
   // ),
-  Category(
-    name: 'Báo cáo',
-    icon: Assets.svg.icReport.path,
-    color: AppColors.bgNav,
-    type: CategoryType.report,
-  ),
+  // Category(
+  //   name: 'Báo cáo',
+  //   icon: Assets.svg.icReport.path,
+  //   color: AppColors.bgNav,
+  //   type: CategoryType.report,
+  // ),
 ];
 
 List<Category> lsOtherClass = [
-  Category(
-    name: 'Điểm danh',
-    icon: Assets.svg.icCheckIn.path,
-    color: AppColors.bgNav,
-    type: CategoryType.checkIn,
-  ),
   Category(
     name: 'Danh sách',
     icon: Assets.svg.icCheckList.path,

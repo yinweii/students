@@ -2,12 +2,13 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:students/generated/assets.gen.dart';
+import 'package:students/utils/app_text_style.dart';
 
 class CommonAppbar extends PreferredSize {
   CommonAppbar({
     String? title,
     String? subtitle,
-    Key? key,
+    super.key,
     bool showBackButton = false,
     bool centerTitle = true,
     void Function()? onTapBack,
@@ -20,7 +21,6 @@ class CommonAppbar extends PreferredSize {
     Color? titleColor,
     Color? backButtonColor,
   }) : super(
-          key: key,
           child: AppBar(
             bottom: bottom,
             centerTitle: centerTitle,
@@ -34,6 +34,7 @@ class CommonAppbar extends PreferredSize {
                   children: [
                     Text(
                       title ?? '',
+                      style: AppTextStyles.defaultMedium,
                     ),
                     if (subtitle != null)
                       Text(
@@ -56,10 +57,10 @@ class CommonAppbar extends PreferredSize {
 
 class BackButtonCustom extends StatelessWidget {
   const BackButtonCustom({
-    Key? key,
+    super.key,
     this.onTapBack,
     this.color,
-  }) : super(key: key);
+  });
 
   final void Function()? onTapBack;
   final Color? color;

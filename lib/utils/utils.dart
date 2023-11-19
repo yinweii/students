@@ -14,6 +14,14 @@ class Util {
     return price;
   }
 
+  static Color hexToColor(String code) {
+    // String valueString =
+    //     colorString.split('(0x')[1].split(')')[0]; // kind of hacky..
+    int value = int.parse(code, radix: 17);
+    Color otherColor = Color(value);
+    return Color(value);
+  }
+
   static List<int> listMonth() {
     const month = [
       1,
@@ -48,7 +56,7 @@ mixin Utils {
   static final navigatorState = Constants.navigatorKey.currentState;
 
   // Get size safe area for screen
-  EdgeInsets get sizeSafeArea => MediaQueryData.fromWindow(ui.window).padding;
+  EdgeInsets get sizeSafeArea => MediaQueryData.fromView(ui.window).padding;
 
   // Check device has notch or not
   bool get hasNotch => sizeSafeArea.bottom > 0;

@@ -8,6 +8,7 @@ import 'package:flutter_svg/svg.dart';
 import 'package:students/generated/assets.gen.dart';
 
 import 'package:students/models/category.dart';
+import 'package:students/screens/all_student_info.dart/all_student_info.dart';
 import 'package:students/screens/class_list/class_list_screen.dart';
 import 'package:students/screens/create_student/create_student.dart';
 
@@ -63,11 +64,11 @@ class _HomeScreenState extends ConsumerState<HomeScreen>
                   const CircleAvatar(
                     radius: 40,
                     backgroundImage: NetworkImage(
-                        'https://anhgaixinh.vn/wp-content/uploads/2022/12/anh-dep-co-gai.jpg'),
+                        'https://nofiredrills.com/wp-content/uploads/2016/10/myavatar.png'),
                   ),
                   const SizedBox(width: 16),
-                  SizedBox(
-                    height: screenHeight(context) * 0.1,
+                  Container(
+                    margin: EdgeInsets.only(top: screenHeight(context) * 0.1),
                     child: Column(
                       crossAxisAlignment: CrossAxisAlignment.start,
                       children: [
@@ -80,7 +81,7 @@ class _HomeScreenState extends ConsumerState<HomeScreen>
                           ),
                         ),
                         const Text(
-                          'Mr. Dyan',
+                          'Mrs. Luna',
                           style: TextStyle(
                             color: AppColors.black1,
                             fontWeight: FontWeight.w500,
@@ -161,6 +162,7 @@ class _HomeScreenState extends ConsumerState<HomeScreen>
                               )
                               .toList(),
                         ),
+                        const SizedBox(height: 30),
                         GestureDetector(
                           onTap: () =>
                               push(context, const CreateStudentScreen()),
@@ -295,6 +297,7 @@ class _HomeScreenState extends ConsumerState<HomeScreen>
 
         break;
       case CategoryType.userInfo:
+        push(context, const AllStudentInfoScreen());
         break;
       case CategoryType.myClass:
         break;

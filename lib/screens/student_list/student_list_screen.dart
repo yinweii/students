@@ -1,29 +1,36 @@
+import 'dart:math';
+
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:percent_indicator/linear_percent_indicator.dart';
-import 'package:students/components/common_button.dart';
+import 'package:students/components/common_appbar.dart';
+
 import 'package:students/generated/assets.gen.dart';
-import 'package:students/screens/create_student/create_student.dart';
+
+import 'package:students/models/class_model.dart';
+
 import 'package:students/screens/student_detail/student_detail.dart';
 import 'package:students/screens/student_list/components/point_form.dart';
 import 'package:students/screens/student_list/components/search_student.dart';
+import 'package:students/screens/student_list/student_list_state_notifier.dart';
 import 'package:students/utils/app_colors.dart';
 import 'package:students/utils/app_text_style.dart';
 import 'package:students/utils/dialog.dart';
 import 'package:students/utils/utils.dart';
 
 class StudentListScreen extends ConsumerWidget with Utils {
-  const StudentListScreen({super.key});
+  final Class? classData;
+  const StudentListScreen({super.key, this.classData});
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
+    final state = ref.watch(studentLsitProvider(classData));
+    final notifier = ref.read(studentLsitProvider(classData).notifier);
     return Scaffold(
-      appBar: AppBar(
-        title: Text(
-          'Danh sách',
-          style: AppTextStyles.defaultBold,
-        ),
+      appBar: CommonAppbar(
+        title: 'Danh sách(${classData?.className})',
+        showBackButton: true,
         actions: [
           GestureDetector(
             onTap: () async {
@@ -32,8 +39,11 @@ class StudentListScreen extends ConsumerWidget with Utils {
                 delegate: CustomSearchDelegate(),
               );
             },
-            child: const Icon(
-              Icons.search,
+            child: const Padding(
+              padding: EdgeInsets.all(8.0),
+              child: Icon(
+                Icons.search,
+              ),
             ),
           ),
         ],
@@ -43,11 +53,15 @@ class StudentListScreen extends ConsumerWidget with Utils {
         children: [
           Expanded(
             child: ListView.builder(
-              itemCount: 6,
+              itemCount: state.students.length,
               shrinkWrap: true,
               itemBuilder: (context, index) {
                 return GestureDetector(
-                  onTap: () => push(context, const StudentDetailScreen()),
+                  onTap: () => push(
+                      context,
+                      StudentDetailScreen(
+                        student: state.students[index],
+                      )),
                   child: Container(
                     margin: const EdgeInsets.all(8),
                     height: screenHeight(context) * 0.12,
@@ -62,13 +76,14 @@ class StudentListScreen extends ConsumerWidget with Utils {
                             Row(
                               crossAxisAlignment: CrossAxisAlignment.start,
                               children: [
-                                const Padding(
-                                  padding: EdgeInsets.only(left: 8, top: 8),
+                                Padding(
+                                  padding:
+                                      const EdgeInsets.only(left: 8, top: 8),
                                   child: CircleAvatar(
                                     radius: 24,
                                     backgroundColor: Colors.grey,
                                     backgroundImage: NetworkImage(
-                                        'https://robohash.org/YGY.png?set=set1&size=150x150'),
+                                        'https://robohash.org/student/${Random().nextInt(20)}'),
                                   ),
                                 ),
                                 const SizedBox(width: 16),
@@ -89,13 +104,20 @@ class StudentListScreen extends ConsumerWidget with Utils {
                                               child: Row(
                                                 children: [
                                                   Text(
-                                                    'Nguyễn Văn A',
+                                                    state.students[index]
+                                                            .name ??
+                                                        '',
                                                     style: AppTextStyles
                                                         .defaultBold,
                                                   ),
                                                   const SizedBox(width: 6),
                                                   SvgPicture.asset(
-                                                    Assets.svg.icMale.path,
+                                                    state.students[index]
+                                                                .gender ==
+                                                            'Male'
+                                                        ? Assets.svg.icMale.path
+                                                        : Assets
+                                                            .svg.icFemale.path,
                                                     width: 16,
                                                     height: 16,
                                                   ),
@@ -105,12 +127,19 @@ class StudentListScreen extends ConsumerWidget with Utils {
                                             const SizedBox(
                                               width: 30,
                                             ),
-                                            const Icon(
-                                              Icons.radio_button_unchecked,
-                                              size: 25,
-                                              color: AppColors.bgNav,
+                                            GestureDetector(
+                                              onTap: () => notifier.onCheckIn(
+                                                  state.students[index]),
+                                              child: Icon(
+                                                state.lsCheckin.contains(
+                                                        state.students[index])
+                                                    ? Icons.radio_button_checked
+                                                    : Icons
+                                                        .radio_button_unchecked,
+                                                size: 25,
+                                                color: AppColors.bgNav,
+                                              ),
                                             ),
-                                            // const Icon(Icons.radio_button_unchecked),
                                           ],
                                         ),
                                       ),
@@ -127,9 +156,14 @@ class StudentListScreen extends ConsumerWidget with Utils {
                                   animation: true,
                                   animationDuration: 1000,
                                   lineHeight: 15.0,
-                                  percent: 0.2,
-                                  center: const Text("20.0%"),
-                                  linearStrokeCap: LinearStrokeCap.butt,
+                                  percent: state.lsCheckin
+                                          .contains(state.students[index])
+                                      ? 0.3
+                                      : 0.2,
+                                  center: Text(state.lsCheckin
+                                          .contains(state.students[index])
+                                      ? '3/10'
+                                      : ' 2/10'),
                                   progressColor: Colors.red,
                                 ),
                               ),
@@ -143,7 +177,9 @@ class StudentListScreen extends ConsumerWidget with Utils {
                             onTap: () async {
                               await ShowSimpleDialog.topShowGeneralDialog(
                                   context,
-                                  childWidget: const PointForm());
+                                  childWidget: PointForm(
+                                    student: state.students[index],
+                                  ));
                             },
                             child: const Icon(
                               Icons.brush_outlined,
