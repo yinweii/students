@@ -64,10 +64,13 @@ dev_dependencies:
   flutter_launcher_icons: ^0.13.1
   flutter_keyboard_visibility: ^5.4.1
   uuid: 4.2.1
-  intl: 0.18.1
   flutter_spinkit: ^5.2.0
   flutter_rounded_date_picker: 3.0.4
   grouped_list: ^5.1.2
+
+  # firebase config
+  firebase_core: 2.22.0
+  cloud_firestore: 4.13.0
 
   # The "flutter_lints" package below contains a set of recommended lints to
   # encourage good coding practices. The lint set provided by the package is
