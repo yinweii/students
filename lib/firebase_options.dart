@@ -24,12 +24,12 @@ class DefaultFirebaseOptions {
     }
     switch (defaultTargetPlatform) {
       case TargetPlatform.android:
-        return android;
-      case TargetPlatform.iOS:
         throw UnsupportedError(
-          'DefaultFirebaseOptions have not been configured for ios - '
+          'DefaultFirebaseOptions have not been configured for android - '
           'you can reconfigure this by running the FlutterFire CLI again.',
         );
+      case TargetPlatform.iOS:
+        return ios;
       case TargetPlatform.macOS:
         throw UnsupportedError(
           'DefaultFirebaseOptions have not been configured for macos - '
@@ -52,11 +52,12 @@ class DefaultFirebaseOptions {
     }
   }
 
-  static const FirebaseOptions android = FirebaseOptions(
-    apiKey: 'AIzaSyCLGMhRIEZR9gbaalORv19vdmAPbUzoZ8g',
-    appId: '1:663910274651:android:836aa733428a5b09d9517e',
+  static const FirebaseOptions ios = FirebaseOptions(
+    apiKey: 'AIzaSyD0K-33r4KsLES7u5LE5ea2djxtkB8oe8g',
+    appId: '1:663910274651:ios:90812ec46d9d6418d9517e',
     messagingSenderId: '663910274651',
     projectId: 'studentmanagement-84e63',
     storageBucket: 'studentmanagement-84e63.appspot.com',
+    iosBundleId: 'com.app.student.system',
   );
 }

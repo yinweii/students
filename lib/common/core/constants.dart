@@ -7,6 +7,8 @@ class Constants {
   static GlobalKey<ScaffoldMessengerState> snackBarKey =
       GlobalKey<ScaffoldMessengerState>();
 
+  static const String CLASS_COLLECTION = 'class';
+
   static Future<dynamic> pushNamed(
     String routeName, {
     dynamic argument,

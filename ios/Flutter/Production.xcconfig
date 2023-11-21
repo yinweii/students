@@ -10,6 +10,6 @@
 #include "Generated.xcconfig"
 
 FLUTTER_FLAVOR=production
-PRODUCT_BUNDLE_IDENTIFIER=com.htp.students
+PRODUCT_BUNDLE_IDENTIFIER=com.app.student.system
 DISPLAY_NAME=Students
 FLUTTER_TARGET=lib/main/main_production.dart

@@ -1,5 +1,3 @@
-import 'dart:math';
-
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:students/components/common_appbar.dart';
@@ -11,6 +9,7 @@ import 'package:students/utils/app_text_style.dart';
 import 'package:students/utils/date_time_util.dart';
 import 'package:students/utils/dialog.dart';
 import 'package:students/utils/utils.dart';
+import 'package:flutter_spinkit/flutter_spinkit.dart';
 
 class ClassListScreen extends ConsumerStatefulWidget {
   final Class? classData;
@@ -49,103 +48,126 @@ class _ClassListScreenState extends ConsumerState<ClassListScreen> with Utils {
     final notifier = ref.read(classListProvider.notifier);
     final state = ref.watch(classListProvider);
     return Scaffold(
-      appBar: CommonAppbar(
-        title: 'Danh sách lớp',
-        showBackButton: true,
-        actions: [
-          Padding(
-            padding: const EdgeInsets.all(8.0),
-            child: GestureDetector(
-              onTap: () async {
-                final result = await ShowSimpleDialog.displayTextInputDialog(
-                  context,
-                  classNameController: classNameController,
-                  numberController: numberController,
-                );
-                if (result == null) {
-                  return;
-                }
-                notifier.addClass(result);
-              },
-              child: const Icon(Icons.add),
+        appBar: CommonAppbar(
+          title: 'Danh sách lớp',
+          showBackButton: true,
+          actions: [
+            Padding(
+              padding: const EdgeInsets.all(8.0),
+              child: GestureDetector(
+                onTap: () async {
+                  final result = await ShowSimpleDialog.displayTextInputDialog(
+                    context,
+                    classNameController: classNameController,
+                    numberController: numberController,
+                  );
+                  if (result == null) {
+                    return;
+                  }
+                  await notifier.createNewClass(result);
+                },
+                child: const Icon(Icons.add),
+              ),
             ),
-          ),
-        ],
-      ),
-      body: Column(
-        crossAxisAlignment: CrossAxisAlignment.start,
-        children: [
-          Padding(
-            padding: const EdgeInsets.symmetric(vertical: 16, horizontal: 16),
-            child: Text('TỔNG SỐ: ${state.classes.length}',
-                style: AppTextStyles.defaultBold),
-          ),
-          Expanded(
-            child: ListView.builder(
-              itemCount: state.classes.length,
-              shrinkWrap: true,
-              itemBuilder: (context, index) {
-                return GestureDetector(
-                  onTap: () => push(
-                      context,
-                      StudentListScreen(
-                        classData: state.classes[index],
-                      )),
-                  child: Container(
-                    margin: const EdgeInsets.all(8),
-                    height: screenHeight(context) * 0.12,
-                    decoration: BoxDecoration(
-                      borderRadius: BorderRadius.circular(8),
-                      border: Border.all(color: AppColors.grey969696),
-                    ),
-                    child: Row(
-                      children: [
-                        Container(
-                          width: 6,
-                          decoration: BoxDecoration(
-                            borderRadius: BorderRadius.circular(8),
-                            color: state.classes[index].hashColor?.toColor() ??
-                                AppColors.grey969696,
+          ],
+        ),
+        body: state.lsClass.when(
+            (_) {
+              if (state.classes.isEmpty) {
+                return const Center(
+                  child: Text('Bạn chưa có lớp học nào'),
+                );
+              }
+              return Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  Padding(
+                    padding: const EdgeInsets.symmetric(
+                        vertical: 16, horizontal: 16),
+                    child: Text('TỔNG SỐ: ${state.classes.length}',
+                        style: AppTextStyles.defaultBold),
+                  ),
+                  Expanded(
+                    child: ListView.builder(
+                      itemCount: state.classes.length,
+                      shrinkWrap: true,
+                      itemBuilder: (context, index) {
+                        return GestureDetector(
+                          onLongPress: () async {
+                            await notifier.deleteClass(state.classes[index]);
+                          },
+                          onTap: () => push(
+                              context,
+                              StudentListScreen(
+                                classData: state.classes[index],
+                              )),
+                          child: Container(
+                            margin: const EdgeInsets.all(8),
+                            height: screenHeight(context) * 0.12,
+                            decoration: BoxDecoration(
+                              borderRadius: BorderRadius.circular(8),
+                              border: Border.all(color: AppColors.grey969696),
+                            ),
+                            child: Row(
+                              children: [
+                                Container(
+                                  width: 6,
+                                  decoration: BoxDecoration(
+                                    borderRadius: BorderRadius.circular(8),
+                                    color: state.classes[index].hashColor
+                                            ?.toColor() ??
+                                        AppColors.grey969696,
+                                  ),
+                                ),
+                                const SizedBox(width: 16),
+                                Padding(
+                                  padding: const EdgeInsets.all(8.0),
+                                  child: Column(
+                                    crossAxisAlignment:
+                                        CrossAxisAlignment.start,
+                                    mainAxisAlignment:
+                                        MainAxisAlignment.spaceAround,
+                                    children: [
+                                      Text(
+                                        state.classes[index].name ?? '',
+                                        style:
+                                            AppTextStyles.defaultBold.copyWith(
+                                          fontSize: 20,
+                                        ),
+                                      ),
+                                      Text(
+                                        'Last update: ${DateTimeUtil.updateTime(state.classes[index].updateAt)}',
+                                        style:
+                                            AppTextStyles.defaultBold.copyWith(
+                                          color: AppColors.black393939,
+                                          fontSize: 12,
+                                        ),
+                                      ),
+                                      Text(
+                                        'Tổng số: ${state.classes[index].total ?? 0}',
+                                        style:
+                                            AppTextStyles.defaultBold.copyWith(
+                                          fontSize: 14,
+                                        ),
+                                      ),
+                                    ],
+                                  ),
+                                )
+                              ],
+                            ),
                           ),
-                        ),
-                        const SizedBox(width: 16),
-                        Padding(
-                          padding: const EdgeInsets.all(8.0),
-                          child: Column(
-                            crossAxisAlignment: CrossAxisAlignment.start,
-                            mainAxisAlignment: MainAxisAlignment.spaceAround,
-                            children: [
-                              Text(
-                                state.classes[index].className ?? '',
-                                style: AppTextStyles.defaultBold.copyWith(
-                                  fontSize: 20,
-                                ),
-                              ),
-                              Text(
-                                'Last update: ${DateTimeUtil.updateTime(state.classes[index].updateAt ?? '')}',
-                                style: AppTextStyles.defaultBold.copyWith(
-                                  color: AppColors.black393939,
-                                  fontSize: 12,
-                                ),
-                              ),
-                              Text(
-                                'Tổng số: ${state.classes[index].number}',
-                                style: AppTextStyles.defaultBold.copyWith(
-                                  fontSize: 14,
-                                ),
-                              ),
-                            ],
-                          ),
-                        )
-                      ],
+                        );
+                      },
                     ),
                   ),
-                );
-              },
-            ),
-          ),
-        ],
-      ),
-    );
+                ],
+              );
+            },
+            loading: () => const SpinKitCircle(
+                  color: Colors.lightBlueAccent,
+                ),
+            error: (_) {
+              return null;
+            }));
   }
 }

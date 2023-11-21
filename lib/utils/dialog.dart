@@ -313,9 +313,8 @@ class ShowSimpleDialog with Utils {
                       height: 45,
                       onTap: () {
                         final result = Class(
-                          className: classNameController.text,
-                          number: int.parse(numberController.text),
-                          updateAt: DateTime.now().toString(),
+                          name: classNameController.text,
+                          total: int.parse(numberController.text),
                         );
                         classNameController.clear();
                         numberController.clear();

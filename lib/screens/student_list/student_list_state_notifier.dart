@@ -1,4 +1,5 @@
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:students/common/core/constants.dart';
 import 'package:students/models/category.dart';
 import 'package:students/models/class_model.dart';
 import 'package:students/models/point.dart';
@@ -11,9 +12,9 @@ final studentLsitProvider = StateNotifierProviderFamily<
 });
 
 class StudentListStateNotifier extends StateNotifier<StudentListState> {
-  StudentListStateNotifier() : super(StudentListState()) {
-    state = state.copyWith(students: studentsData);
-  }
+  StudentListStateNotifier() : super(StudentListState());
+
+  Future<void> _getAllClass() async {}
 
   void onCheckIn(Student student) {
     if (state.lsCheckin.contains(student)) {
@@ -54,11 +55,11 @@ class StudentListStateNotifier extends StateNotifier<StudentListState> {
       return;
     }
     final indexOfStudent = state.students.indexOf(studentUpadte);
-    final student = studentsData[indexOfStudent];
-    final update = student.copyWith(
-      points: [...student.points ?? [], newPoint],
-    );
-    studentsData[indexOfStudent] = update;
+   
+    // final update = student.copyWith(
+    //   points: [...student.points ?? [], newPoint],
+    // );
+   
 
     state = state.copyWith(students: state.students);
   }

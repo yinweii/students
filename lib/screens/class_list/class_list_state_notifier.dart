@@ -1,40 +1,72 @@
-import 'dart:math';
+import 'dart:developer';
 
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:students/api/api_client.dart';
+import 'package:students/api/api_endpoints.dart';
+import 'package:students/api/api_response/api_response.dart';
+import 'package:students/api/network_resource_state/network_resource_state.dart';
+import 'package:students/common/core/constants.dart';
+import 'package:students/models/category.dart';
 import 'package:students/models/class_model.dart';
 import 'package:students/screens/class_list/class_list_state.dart';
 import 'package:uuid/uuid.dart';
 
 final classListProvider =
-    StateNotifierProvider<ClassListStateNotifier, ClassListState >((ref) {
-  return ClassListStateNotifier();
+    StateNotifierProvider.autoDispose<ClassListStateNotifier, ClassListState>(
+        (ref) {
+  return ClassListStateNotifier(ref);
 });
 
 class ClassListStateNotifier extends StateNotifier<ClassListState> {
-  ClassListStateNotifier() : super(ClassListState()) {
-    state = state.copyWith(classes: classesDumpy);
+  ClassListStateNotifier(this.ref) : super(ClassListState()) {
+    _getAllClass();
+    // state = state.copyWith(classes: classesDumpy);
+  }
+  Ref ref;
+
+  Future<void> _getAllClass() async {
+    try {
+      state = state.copyWith(lsClass: const NetworkResourceState.loading());
+      final result = await apiClient(ref)
+          .getRequest(ApiEndpoints.classApi, isAuthorized: true);
+      if (result is! ApiResponse || !result.success) {
+        return;
+      }
+      final classes = (result.data as List)
+          .map((e) => Class.fromMap(e as Map<String, dynamic>))
+          .toList();
+      state = state.copyWith(
+          lsClass: NetworkResourceState(classes), classes: classes);
+    } catch (e) {
+      log(e.toString());
+      state = state.copyWith(lsClass: NetworkResourceState.error(e.toString()));
+    }
   }
 
-  void addClass(Class newClass) {
-    var colors = [
-      '#FF0000',
-      '#FFA500',
-      '#FFFF00',
-      '#008000',
-      '#0000FF',
-      '#4B0082',
-      '#EE82EE',
-    ];
-    final hashColor = colors..shuffle();
-    final result = newClass.copyWith(
-      id: const Uuid().v1(),
-      hashColor: hashColor.first,
-    );
+  Future<void> deleteClass(Class classData) async {
+    state = state.copyWith(
+        classes: [...state.classes]..removeWhere((e) => e.id == classData.id));
+  }
 
-    state = state.copyWith(classes: [...state.classes, result]);
+  Future<void> createNewClass(Class newClass) async {
+    final param = {"name": 'Lớp 6A3', "total": 22, "type": "official"};
+    try {
+      final result = await apiClient(ref).postRequest(
+        ApiEndpoints.classApi,
+        isAuthorized: true,
+        params: param,
+      );
+
+      if (result is! ApiResponse || !result.success) {}
+      final newClass = Class.fromMap(result.data as Map<String, dynamic>);
+      state = state.copyWith(classes: [...state.classes, newClass]);
+    } catch (e) {
+      log(e.toString());
+    }
   }
 }
+
 
 extension ColorExtension on String {
   toColor() {

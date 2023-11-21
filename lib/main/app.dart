@@ -13,6 +13,7 @@ Future<void> setupAndRunApp({required EnvState env}) async {
   envProvider =
       StateNotifierProvider<ApiClient, EnvState>((ref) => ApiClient(env, ref));
   final token = await SecureStorage.getToken();
+
   runApp(ProviderScope(
     child: App(
       isLogged: token.isNotEmpty,
@@ -48,7 +49,7 @@ class App extends ConsumerWidget {
         ),
       ),
       debugShowCheckedModeBanner: false,
-      initialRoute: Routes.homeScreen,
+      initialRoute: isLogged ? Routes.homeScreen : Routes.loginScreen,
       routes: Routes.routes,
       localizationsDelegates: const [],
       navigatorObservers: const [],

@@ -9,7 +9,7 @@
 	<key>PLIST_VERSION</key>
 	<string>1</string>
 	<key>BUNDLE_ID</key>
-	<string>com.app.student.system.dev</string>
+	<string>com.app.student.system</string>
 	<key>PROJECT_ID</key>
 	<string>studentmanagement-84e63</string>
 	<key>STORAGE_BUCKET</key>
@@ -25,6 +25,6 @@
 	<key>IS_SIGNIN_ENABLED</key>
 	<true></true>
 	<key>GOOGLE_APP_ID</key>
-	<string>1:663910274651:ios:72a243d722b00f57d9517e</string>
+	<string>1:663910274651:ios:90812ec46d9d6418d9517e</string>
 </dict>
 </plist>

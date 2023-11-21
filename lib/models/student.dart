@@ -164,22 +164,23 @@ class Student {
   }
 }
 
-List<Student> studentsData = List.generate(
-  15,
-  (index) {
-    return Student(
-      id: (index + 1).toString(),
-      classId: "ClassA",
-      otherClassId: "ClassB",
-      name: "Student ${index + 1}",
-      gender: (index % 2 == 0) ? "Male" : "Female",
-      percent: (index + 1) * 10,
-      phoneNumber: "123456789${index + 1}",
-      dob: "2000-0$index-01",
-      contractPerson: "Parent",
-      phoneOfContractPerson: "987654321",
-      address: "Address ${index + 1} Street ${index + 1} , City ${index + 1}",
-      classInfo: classesDumpy[index % 2],
-    );
-  },
-);
+
+// List<Student> studentsData = List.generate(
+//   15,
+//   (index) {
+//     return Student(
+//       id: (index + 1).toString(),
+//       classId: "ClassA",
+//       otherClassId: "ClassB",
+//       name: "Student ${index + 1}",
+//       gender: (index % 2 == 0) ? "Male" : "Female",
+//       percent: (index + 1) * 10,
+//       phoneNumber: "123456789${index + 1}",
+//       dob: "2000-0$index-01",
+//       contractPerson: "Parent",
+//       phoneOfContractPerson: "987654321",
+//       address: "Address ${index + 1} Street ${index + 1} , City ${index + 1}",
+//       classInfo: classesDumpy[index % 2],
+//     );
+//   },
+// );

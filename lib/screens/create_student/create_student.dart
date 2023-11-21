@@ -67,7 +67,7 @@ class _CreateStudentScreenState extends ConsumerState<CreateStudentScreen>
     return Scaffold(
       appBar: CommonAppbar(
         title: 'Thông tin học sinh',
-       showBackButton: true,
+        showBackButton: true,
       ),
       bottomNavigationBar: Padding(
         padding: const EdgeInsets.all(16).copyWith(bottom: 24),
@@ -161,11 +161,11 @@ class _CreateStudentScreenState extends ConsumerState<CreateStudentScreen>
                           ),
                         ],
                       ),
-                      items: classesDumpy
+                      items: <Class>[]
                           .map((Class item) => DropdownMenuItem<Class>(
                                 value: item,
                                 child: Text(
-                                  item.className ?? '',
+                                  item.name ?? '',
                                   style: AppTextStyles.defaultBold,
                                   overflow: TextOverflow.ellipsis,
                                 ),
@@ -228,37 +228,39 @@ class _CreateStudentScreenState extends ConsumerState<CreateStudentScreen>
                     child: FormInputField(
                       label: 'Ngày tháng năm sinh',
                       inputWidget: Container(
-                          padding: const EdgeInsets.all(8),
-                          decoration: BoxDecoration(
-                            borderRadius: BorderRadius.circular(12),
-                            border: Border.all(color: Colors.grey),
+                        padding: const EdgeInsets.all(8),
+                        decoration: BoxDecoration(
+                          borderRadius: BorderRadius.circular(12),
+                          border: Border.all(color: Colors.grey),
+                        ),
+                        height: 54,
+                        child: GestureDetector(
+                          onTap: () async {
+                            final newDateTime = await showRoundedDatePicker(
+                              height: screenHeight(context) * 0.36,
+                              context: context,
+                              initialDate: DateTime.now(),
+                              firstDate: DateTime(DateTime.now().year - 50),
+                              lastDate: DateTime(DateTime.now().year + 1),
+                              borderRadius: 16,
+                            );
+                            setState(() {
+                              selectDatetime = newDateTime;
+                            });
+                          },
+                          child: Row(
+                            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                            children: [
+                              Text(selectDatetime == null
+                                  ? 'yyyy-MM-dd'
+                                  : DateTimeUtil.updateTime(
+                                          selectDatetime.toString()) ??
+                                      ''),
+                              const Icon(Icons.date_range)
+                            ],
                           ),
-                          height: 54,
-                          child: GestureDetector(
-                            onTap: () async {
-                              final newDateTime = await showRoundedDatePicker(
-                                height: screenHeight(context) * 0.36,
-                                context: context,
-                                initialDate: DateTime.now(),
-                                firstDate: DateTime(DateTime.now().year - 50),
-                                lastDate: DateTime(DateTime.now().year + 1),
-                                borderRadius: 16,
-                              );
-                              setState(() {
-                                selectDatetime = newDateTime;
-                              });
-                            },
-                            child: Row(
-                              mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                              children: [
-                                Text(selectDatetime == null
-                                    ? 'yyyy-MM-dd'
-                                    : DateTimeUtil.updateTime(
-                                        selectDatetime.toString())),
-                                const Icon(Icons.date_range)
-                              ],
-                            ),
-                          )),
+                        ),
+                      ),
                     ),
                   ),
                   // const SizedBox(width: 30),

@@ -29,7 +29,7 @@ class StudentListScreen extends ConsumerWidget with Utils {
     final notifier = ref.read(studentLsitProvider(classData).notifier);
     return Scaffold(
       appBar: CommonAppbar(
-        title: 'Danh sách(${classData?.className})',
+        title: 'Danh sách(${classData?.name})',
         showBackButton: true,
         actions: [
           GestureDetector(

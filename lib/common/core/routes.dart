@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:students/login/login_screen.dart';
 import 'package:students/screens/check_in/check_in_screen.dart';
 import 'package:students/screens/class/class_screen.dart';
 import 'package:students/screens/class_list/class_list_screen.dart';
@@ -10,6 +11,7 @@ import 'package:students/screens/home/home_screen.dart';
 /// The Routes class contains static constants and a map of named routes to widget builders for
 /// navigation in a Flutter app.
 class Routes {
+  static const loginScreen = '/login_screen';
   static const dashboardScreen = '/dashboard_screen';
   static const homeScreen = '/home_screen';
   static const classScreen = '/class_screen';
@@ -20,6 +22,7 @@ class Routes {
   static final Map<String, WidgetBuilder> routes = {
     '/': (context) => defaultRoute(),
     // dashboardScreen: (context) => const DashBoardScreen(),
+    loginScreen: (context) => const LogInScreen(),
     classScreen: (context) => const ClassScreen(),
     homeScreen: (context) => const HomeScreen(),
     createStudent: (context) => const CreateStudentScreen(),

@@ -41,7 +41,7 @@ class CustomSearchDelegate extends SearchDelegate<String> with Utils {
 
   @override
   Widget buildResults(BuildContext context) {
-    final results = studentsData
+    final results = []
         .where((item) => item.name!.toLowerCase().contains(query.toLowerCase()))
         .toList();
     if (results.isEmpty) {

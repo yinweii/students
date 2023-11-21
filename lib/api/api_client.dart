@@ -273,7 +273,7 @@ class ApiClient extends StateNotifier<EnvState> {
     logger.v(json.decode(body), 'Response │ Status: $statusCode\n$url');
 
     switch (statusCode) {
-      case 200:
+      case 200 || 201:
         final resBody = json.decode(body);
         ApiResponse response;
 
