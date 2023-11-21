@@ -9,7 +9,10 @@ class DateTimeUtil {
     return firstDayNextMonth.difference(firstDayThisMonth).inDays;
   }
 
-  static String updateTime(String date) {
+  static String? updateTime(String? date) {
+    if (date == null) {
+      return '';
+    }
     final dateFormat = DateFormat("yyyy-MM-dd");
     final dateTime = dateFormat.parse(date);
     return DateFormat("yyyy-MM-dd").format(dateTime);
