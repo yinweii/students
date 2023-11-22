@@ -7,13 +7,12 @@ import 'package:students/components/common_button.dart';
 import 'package:students/components/input_form.dart';
 import 'package:students/components/text_form_field.dart';
 import 'package:students/models/class_model.dart';
+import 'package:students/screens/create_student/create_student_state_notifier.dart';
 import 'package:students/utils/app_colors.dart';
 import 'package:students/utils/app_text_style.dart';
 import 'package:students/utils/date_time_util.dart';
 import 'package:students/utils/utils.dart';
 import 'package:flutter_rounded_date_picker/flutter_rounded_date_picker.dart';
-
-enum Gender { male, female }
 
 class CreateStudentScreen extends ConsumerStatefulWidget {
   const CreateStudentScreen({super.key});
@@ -25,10 +24,6 @@ class CreateStudentScreen extends ConsumerStatefulWidget {
 
 class _CreateStudentScreenState extends ConsumerState<CreateStudentScreen>
     with Utils {
-  Gender? _selected = Gender.male;
-  Class? selectedValue;
-  String? classType = 'Chính Quy';
-  DateTime? selectDatetime;
   late TextEditingController _nameController;
   late TextEditingController _phoneNumberController;
   late TextEditingController _emailController;
@@ -39,7 +34,6 @@ class _CreateStudentScreenState extends ConsumerState<CreateStudentScreen>
 
   @override
   void initState() {
-    // TODO: implement initState
     super.initState();
     _nameController = TextEditingController();
     _phoneNumberController = TextEditingController();
@@ -64,6 +58,8 @@ class _CreateStudentScreenState extends ConsumerState<CreateStudentScreen>
 
   @override
   Widget build(BuildContext context) {
+    final state = ref.watch(createStudentProvider);
+    final notifier = ref.read(createStudentProvider.notifier);
     return Scaffold(
       appBar: CommonAppbar(
         title: 'Thông tin học sinh',
@@ -94,7 +90,7 @@ class _CreateStudentScreenState extends ConsumerState<CreateStudentScreen>
                       borderRadius: BorderRadius.circular(12),
                       border: Border.all(color: Colors.grey)),
                   child: DropdownButtonHideUnderline(
-                    child: DropdownButton2<String>(
+                    child: DropdownButton2<ClassType>(
                       isExpanded: true,
                       hint: Text(
                         'Select Item',
@@ -103,24 +99,19 @@ class _CreateStudentScreenState extends ConsumerState<CreateStudentScreen>
                           color: Theme.of(context).hintColor,
                         ),
                       ),
-                      items: [
-                        'Chính Quy',
-                        'Dạy thêm',
-                      ]
-                          .map((String item) => DropdownMenuItem<String>(
+                      items: classTypeDumy
+                          .map((ClassType item) => DropdownMenuItem<ClassType>(
                                 value: item,
                                 child: Text(
-                                  item,
+                                  item.name,
                                   style: AppTextStyles.defaultBold,
                                   overflow: TextOverflow.ellipsis,
                                 ),
                               ))
                           .toList(),
-                      value: classType ?? 'Chính Quy',
-                      onChanged: (String? value) {
-                        setState(() {
-                          classType = value;
-                        });
+                      value: state.classType ?? classTypeDumy.first,
+                      onChanged: (ClassType? value) {
+                        notifier.onSelectClassType(value);
                       },
                       buttonStyleData: const ButtonStyleData(
                         padding: EdgeInsets.symmetric(horizontal: 16),
@@ -161,7 +152,7 @@ class _CreateStudentScreenState extends ConsumerState<CreateStudentScreen>
                           ),
                         ],
                       ),
-                      items: <Class>[]
+                      items: state.classes
                           .map((Class item) => DropdownMenuItem<Class>(
                                 value: item,
                                 child: Text(
@@ -171,11 +162,9 @@ class _CreateStudentScreenState extends ConsumerState<CreateStudentScreen>
                                 ),
                               ))
                           .toList(),
-                      value: selectedValue,
+                      value: state.onSelectClass,
                       onChanged: (value) {
-                        setState(() {
-                          selectedValue = value;
-                        });
+                        notifier.onSelectClass(value);
                       },
                       iconStyleData: const IconStyleData(
                         icon: Icon(
@@ -244,17 +233,18 @@ class _CreateStudentScreenState extends ConsumerState<CreateStudentScreen>
                               lastDate: DateTime(DateTime.now().year + 1),
                               borderRadius: 16,
                             );
-                            setState(() {
-                              selectDatetime = newDateTime;
-                            });
+                            if (newDateTime == null) {
+                              return;
+                            }
+                            notifier.onSelectDatetime(newDateTime);
                           },
                           child: Row(
                             mainAxisAlignment: MainAxisAlignment.spaceBetween,
                             children: [
-                              Text(selectDatetime == null
-                                  ? 'yyyy-MM-dd'
+                              Text(state.selectDatetime == null
+                                  ? 'YYYY-MM-DD'
                                   : DateTimeUtil.updateTime(
-                                          selectDatetime.toString()) ??
+                                          state.selectDatetime.toString()) ??
                                       ''),
                               const Icon(Icons.date_range)
                             ],
@@ -276,28 +266,24 @@ class _CreateStudentScreenState extends ConsumerState<CreateStudentScreen>
                 children: <Widget>[
                   Expanded(
                     child: ListTile(
-                      title: const Text('Nữ'),
+                      title: const Text('Nam'),
                       leading: Radio<Gender>(
-                        value: Gender.female,
-                        groupValue: _selected,
+                        value: Gender.male,
+                        groupValue: state.selectGender,
                         onChanged: (Gender? value) {
-                          setState(() {
-                            _selected = value;
-                          });
+                          notifier.onSelectGender(value);
                         },
                       ),
                     ),
                   ),
                   Expanded(
                     child: ListTile(
-                      title: const Text('Nam'),
+                      title: const Text('Nữ'),
                       leading: Radio<Gender>(
-                        value: Gender.male,
-                        groupValue: _selected,
+                        value: Gender.female,
+                        groupValue: state.selectGender,
                         onChanged: (Gender? value) {
-                          setState(() {
-                            _selected = value;
-                          });
+                          notifier.onSelectGender(value);
                         },
                       ),
                     ),
@@ -306,23 +292,6 @@ class _CreateStudentScreenState extends ConsumerState<CreateStudentScreen>
               ),
             ),
             const SizedBox(height: 8),
-            DottedBorder(
-              borderType: BorderType.RRect,
-              radius: const Radius.circular(12),
-              color: AppColors.grey969696,
-              padding: const EdgeInsets.all(6),
-              child: const ClipRRect(
-                borderRadius: BorderRadius.all(Radius.circular(12)),
-                child: SizedBox(
-                  height: 100,
-                  width: 100,
-                  child: Center(
-                    child: Text('Ảnh thẻ'),
-                  ),
-                ),
-              ),
-            ),
-            const SizedBox(height: 16),
             _buildTitle(
               'Thông tin liên lạc',
             ),

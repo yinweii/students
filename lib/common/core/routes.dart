@@ -1,11 +1,10 @@
 import 'package:flutter/material.dart';
-import 'package:students/login/login_screen.dart';
+import 'package:students/screens/login/login_screen.dart';
 import 'package:students/screens/check_in/check_in_screen.dart';
 import 'package:students/screens/class/class_screen.dart';
 import 'package:students/screens/class_list/class_list_screen.dart';
-import 'package:students/screens/create_student/create_student.dart';
+import 'package:students/screens/create_student/create_student_screen.dart';
 
-import 'package:students/screens/dashboard/dashboard_screen.dart';
 import 'package:students/screens/home/home_screen.dart';
 
 /// The Routes class contains static constants and a map of named routes to widget builders for

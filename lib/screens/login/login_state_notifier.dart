@@ -6,7 +6,7 @@ import 'package:students/api/api_response/api_response.dart';
 import 'package:students/api/network_resource_state/network_resource_state.dart';
 import 'package:students/common/core/routes.dart';
 import 'package:students/common/core/session/session_state_notifier.dart';
-import 'package:students/login/login_state.dart';
+import 'package:students/screens/login/login_state.dart';
 import 'package:students/models/login_response.dart';
 import 'package:students/utils/dialog.dart';
 import 'package:students/utils/utils.dart';

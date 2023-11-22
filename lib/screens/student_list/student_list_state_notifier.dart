@@ -14,7 +14,7 @@ final studentLsitProvider = StateNotifierProviderFamily<
 class StudentListStateNotifier extends StateNotifier<StudentListState> {
   StudentListStateNotifier() : super(StudentListState());
 
-  Future<void> _getAllClass() async {}
+
 
   void onCheckIn(Student student) {
     if (state.lsCheckin.contains(student)) {

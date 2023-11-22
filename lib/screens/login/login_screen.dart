@@ -5,7 +5,7 @@ import 'package:students/components/common_button.dart';
 import 'package:students/components/input_form.dart';
 import 'package:students/components/text_form_field.dart';
 import 'package:students/generated/assets.gen.dart';
-import 'package:students/login/login_state_notifier.dart';
+import 'package:students/screens/login/login_state_notifier.dart';
 import 'package:students/utils/app_colors.dart';
 import 'package:students/utils/app_text_style.dart';
 import 'package:students/utils/utils.dart';

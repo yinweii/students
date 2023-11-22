@@ -10,7 +10,7 @@ import 'package:students/generated/assets.gen.dart';
 import 'package:students/models/category.dart';
 import 'package:students/screens/all_student_info.dart/all_student_info.dart';
 import 'package:students/screens/class_list/class_list_screen.dart';
-import 'package:students/screens/create_student/create_student.dart';
+import 'package:students/screens/create_student/create_student_screen.dart';
 
 import 'package:students/screens/home/components/category_item.dart';
 import 'package:students/screens/home/home_state_nofitier.dart';
