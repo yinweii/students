@@ -88,7 +88,7 @@ class StudentDetailScreen extends ConsumerWidget with Utils {
             ),
             GroupedListView<StudentPoint, String>(
               shrinkWrap: true,
-              elements: student?.points ?? [],
+              elements: [],
               groupBy: (element) => element.createAt ?? '',
               groupComparator: (value1, value2) => value2.compareTo(value1),
               itemComparator: (item1, item2) =>

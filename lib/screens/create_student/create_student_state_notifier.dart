@@ -5,7 +5,9 @@ import 'package:students/api/api_client.dart';
 import 'package:students/api/api_endpoints.dart';
 import 'package:students/api/api_response/api_response.dart';
 import 'package:students/models/class_model.dart';
+import 'package:students/models/student.dart';
 import 'package:students/screens/create_student/create_student_state.dart';
+import 'package:flutter_easyloading/flutter_easyloading.dart';
 
 enum Gender { male, female }
 
@@ -36,6 +38,45 @@ class CreateStudentStateNotifier extends StateNotifier<CreateStudentState> {
     } catch (e) {
       log(e.toString());
       state = state.copyWith(classes: []);
+    }
+  }
+
+  Future<void> createStudent({
+    String? name,
+    String? dob,
+    String? phone,
+    String? email,
+    String? address,
+    String? mainContract,
+    String? mainContractPhone,
+    String? mainContractEmail,
+  }) async {
+    final newStudent = Student(
+      classId: state.onSelectClass?.id,
+      classType: state.classType?.value,
+      name: name,
+      dob: dob,
+      phone: phone,
+      email: email,
+      gender: state.selectGender.name,
+      address: address,
+      mainContract: mainContract,
+      mainContractPhone: mainContractPhone,
+      mainContractEmail: mainContractEmail,
+    );
+
+    try {
+      final result = await apiClient(ref).postRequest(
+        ApiEndpoints.student,
+        params: newStudent.toMap(),
+        isAuthorized: true,
+      );
+      if (result is! ApiResponse || !result.success) {
+        return;
+      }
+      EasyLoading.showSuccess('Success!');
+    } catch (e) {
+      EasyLoading.showError(e.toString());
     }
   }
 

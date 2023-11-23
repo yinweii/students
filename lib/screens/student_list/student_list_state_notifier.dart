@@ -1,6 +1,9 @@
+import 'dart:developer';
+
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:students/common/core/constants.dart';
-import 'package:students/models/category.dart';
+import 'package:students/api/api_client.dart';
+import 'package:students/api/api_endpoints.dart';
+import 'package:students/api/api_response/api_response.dart';
 import 'package:students/models/class_model.dart';
 import 'package:students/models/point.dart';
 import 'package:students/models/student.dart';
@@ -8,13 +11,37 @@ import 'package:students/screens/student_list/student_list_state.dart';
 
 final studentLsitProvider = StateNotifierProviderFamily<
     StudentListStateNotifier, StudentListState, Class?>((ref, classData) {
-  return StudentListStateNotifier();
+  return StudentListStateNotifier(ref, classData);
 });
 
 class StudentListStateNotifier extends StateNotifier<StudentListState> {
-  StudentListStateNotifier() : super(StudentListState());
+  StudentListStateNotifier(this.ref, this.classData)
+      : super(StudentListState()) {
+    _getAllStudent();
+  }
 
+  Ref ref;
+  final Class? classData;
 
+  Future<void> _getAllStudent() async {
+    try {
+      state = state.copyWith(showLoadingIndicator: true);
+      final result = await apiClient(ref)
+          .getRequest(ApiEndpoints.student, isAuthorized: true, params: {
+        'classId': classData?.id,
+      });
+      if (result is! ApiResponse || !result.success) {
+        return;
+      }
+      final students = (result.data as List)
+          .map((e) => Student.fromMap(e as Map<String, dynamic>))
+          .toList();
+      state = state.copyWith(students: students, showLoadingIndicator: false);
+    } catch (e) {
+      log(e.toString());
+      state = state.copyWith(showLoadingIndicator: false);
+    }
+  }
 
   void onCheckIn(Student student) {
     if (state.lsCheckin.contains(student)) {
@@ -55,11 +82,10 @@ class StudentListStateNotifier extends StateNotifier<StudentListState> {
       return;
     }
     final indexOfStudent = state.students.indexOf(studentUpadte);
-   
+
     // final update = student.copyWith(
     //   points: [...student.points ?? [], newPoint],
     // );
-   
 
     state = state.copyWith(students: state.students);
   }

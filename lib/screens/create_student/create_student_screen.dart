@@ -71,7 +71,18 @@ class _CreateStudentScreenState extends ConsumerState<CreateStudentScreen>
           height: 56,
           bgColor: AppColors.bgNav,
           label: 'Lưu thông tin',
-          onTap: () {},
+          onTap: () async {
+            await notifier.createStudent(
+              name: _nameController.text,
+              dob: state.selectDatetime.toString(),
+              phone: _phoneNumberController.text,
+              email: _emailController.text,
+              address: _addressController.text,
+              mainContract: _nameOfContractController.text,
+              mainContractPhone: _phoneOfContractController.text,
+              mainContractEmail: _emailOfContractController.text,
+            );
+          },
         ),
       ),
       body: SingleChildScrollView(

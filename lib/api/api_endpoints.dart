@@ -3,5 +3,6 @@ class ApiEndpoints {
   static const refreshToken = '/refresh_token';
   static const login = '/auth/login';
   static const classApi = '/class';
+  static const student = '/student';
  
 }

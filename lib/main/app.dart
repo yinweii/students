@@ -6,6 +6,7 @@ import 'package:students/common/core/routes.dart';
 import 'package:students/common/data/local_secure_storage.dart';
 import 'package:students/env/env_state.dart';
 import 'package:students/utils/app_colors.dart';
+import 'package:flutter_easyloading/flutter_easyloading.dart';
 
 late StateNotifierProvider<ApiClient, EnvState> envProvider;
 Future<void> setupAndRunApp({required EnvState env}) async {
@@ -53,11 +54,13 @@ class App extends ConsumerWidget {
       routes: Routes.routes,
       localizationsDelegates: const [],
       navigatorObservers: const [],
-      builder: (context, child) => GestureDetector(
-        // dismiss keyboard when tap outside whole app
-        onTap: () =>
-            WidgetsBinding.instance.focusManager.primaryFocus?.unfocus(),
-        child: child,
+      builder: EasyLoading.init(
+        builder: (context, child) => GestureDetector(
+          // dismiss keyboard when tap outside whole app
+          onTap: () =>
+              WidgetsBinding.instance.focusManager.primaryFocus?.unfocus(),
+          child: child,
+        ),
       ),
     );
   }

@@ -1,71 +1,60 @@
-// ignore_for_file: public_member_api_docs, sort_constructors_first
 import 'dart:convert';
-
-import 'package:flutter/foundation.dart';
-
-import 'package:students/models/class_model.dart';
-import 'package:students/models/point.dart';
 
 class Student {
   final String? id;
   final String? classId;
-  final String? otherClassId;
   final String? name;
   final String? gender;
-  final int? percent;
-  final String? phoneNumber;
+  final String? classType;
+  final String? phone;
   final String? dob;
-  final String? contractPerson;
-  final String? phoneOfContractPerson;
   final String? address;
-  final List<StudentPoint>? points;
-  final Class classInfo;
+  final String? email;
+  final String? mainContract;
+  final String? mainContractPhone;
+  final String? mainContractEmail;
   Student({
     this.id,
     this.classId,
-    this.otherClassId,
     this.name,
     this.gender,
-    this.percent,
-    this.phoneNumber,
+    this.classType,
+    this.phone,
     this.dob,
-    this.contractPerson,
-    this.phoneOfContractPerson,
     this.address,
-    this.points,
-    required this.classInfo,
+    this.email,
+    this.mainContract,
+    this.mainContractPhone,
+    this.mainContractEmail,
   });
 
   Student copyWith({
     String? id,
     String? classId,
-    String? otherClassId,
     String? name,
     String? gender,
-    int? percent,
-    String? phoneNumber,
+    String? classType,
+    String? phone,
     String? dob,
-    String? contractPerson,
-    String? phoneOfContractPerson,
     String? address,
-    List<StudentPoint>? points,
-    Class? classInfo,
+    String? email,
+    String? mainContract,
+    String? mainContractPhone,
+    String? mainContractEmail,
   }) {
     return Student(
       id: id ?? this.id,
       classId: classId ?? this.classId,
-      otherClassId: otherClassId ?? this.otherClassId,
       name: name ?? this.name,
       gender: gender ?? this.gender,
-      percent: percent ?? this.percent,
-      phoneNumber: phoneNumber ?? this.phoneNumber,
+      classType: classType ?? this.classType,
+      phone: phone ?? this.phone,
       dob: dob ?? this.dob,
-      contractPerson: contractPerson ?? this.contractPerson,
-      phoneOfContractPerson:
-          phoneOfContractPerson ?? this.phoneOfContractPerson,
       address: address ?? this.address,
-      points: points ?? this.points,
-      classInfo: classInfo ?? this.classInfo,
+      email: email ?? this.email,
+      mainContract: mainContract ?? this.mainContract,
+      mainContractPhone: mainContractPhone ?? this.mainContractPhone,
+      mainContractEmail: mainContractEmail ?? this.mainContractEmail,
     );
   }
 
@@ -73,47 +62,38 @@ class Student {
     return <String, dynamic>{
       'id': id,
       'classId': classId,
-      'otherClassId': otherClassId,
       'name': name,
       'gender': gender,
-      'percent': percent,
-      'phoneNumber': phoneNumber,
+      'classType': classType,
+      'phone': phone,
       'dob': dob,
-      'contractPerson': contractPerson,
-      'phoneOfContractPerson': phoneOfContractPerson,
       'address': address,
-      'points': points?.map((x) => x.toMap()).toList(),
-      'classInfo': classInfo.toMap(),
+      'email': email,
+      'mainContract': mainContract,
+      'mainContractPhone': mainContractPhone,
+      'mainContractEmail': mainContractEmail,
     };
   }
 
   factory Student.fromMap(Map<String, dynamic> map) {
     return Student(
-      id: map['id'] != null ? map['id'] as String : null,
-      classId: map['classId'] != null ? map['classId'] as String : null,
-      otherClassId:
-          map['otherClassId'] != null ? map['otherClassId'] as String : null,
+      id: map['id']?.toString(),
+      classId: map['classId']?.toString(),
       name: map['name'] != null ? map['name'] as String : null,
       gender: map['gender'] != null ? map['gender'] as String : null,
-      percent: map['percent'] != null ? map['percent'] as int : null,
-      phoneNumber:
-          map['phoneNumber'] != null ? map['phoneNumber'] as String : null,
+      classType: map['classType'] != null ? map['classType'] as String : null,
+      phone: map['phone'] != null ? map['phone'] as String : null,
       dob: map['dob'] != null ? map['dob'] as String : null,
-      contractPerson: map['contractPerson'] != null
-          ? map['contractPerson'] as String
-          : null,
-      phoneOfContractPerson: map['phoneOfContractPerson'] != null
-          ? map['phoneOfContractPerson'] as String
-          : null,
       address: map['address'] != null ? map['address'] as String : null,
-      points: map['points'] != null
-          ? List<StudentPoint>.from(
-              (map['points'] as List<int>).map<StudentPoint?>(
-                (x) => StudentPoint.fromMap(x as Map<String, dynamic>),
-              ),
-            )
+      email: map['email'] != null ? map['email'] as String : null,
+      mainContract:
+          map['mainContract'] != null ? map['mainContract'] as String : null,
+      mainContractPhone: map['mainContractPhone'] != null
+          ? map['mainContractPhone'] as String
           : null,
-      classInfo: Class.fromMap(map['classInfo'] as Map<String, dynamic>),
+      mainContractEmail: map['mainContractEmail'] != null
+          ? map['mainContractEmail'] as String
+          : null,
     );
   }
 
@@ -124,7 +104,7 @@ class Student {
 
   @override
   String toString() {
-    return 'Student(id: $id, classId: $classId, otherClassId: $otherClassId, name: $name, gender: $gender, percent: $percent, phoneNumber: $phoneNumber, dob: $dob, contractPerson: $contractPerson, phoneOfContractPerson: $phoneOfContractPerson, address: $address, points: $points, classInfo: $classInfo)';
+    return 'Student(id: $id, classId: $classId, name: $name, gender: $gender, classType: $classType, phone: $phone, dob: $dob, address: $address, email: $email, mainContract: $mainContract, mainContractPhone: $mainContractPhone, mainContractEmail: $mainContractEmail)';
   }
 
   @override
@@ -133,54 +113,31 @@ class Student {
 
     return other.id == id &&
         other.classId == classId &&
-        other.otherClassId == otherClassId &&
         other.name == name &&
         other.gender == gender &&
-        other.percent == percent &&
-        other.phoneNumber == phoneNumber &&
+        other.classType == classType &&
+        other.phone == phone &&
         other.dob == dob &&
-        other.contractPerson == contractPerson &&
-        other.phoneOfContractPerson == phoneOfContractPerson &&
         other.address == address &&
-        listEquals(other.points, points) &&
-        other.classInfo == classInfo;
+        other.email == email &&
+        other.mainContract == mainContract &&
+        other.mainContractPhone == mainContractPhone &&
+        other.mainContractEmail == mainContractEmail;
   }
 
   @override
   int get hashCode {
     return id.hashCode ^
         classId.hashCode ^
-        otherClassId.hashCode ^
         name.hashCode ^
         gender.hashCode ^
-        percent.hashCode ^
-        phoneNumber.hashCode ^
+        classType.hashCode ^
+        phone.hashCode ^
         dob.hashCode ^
-        contractPerson.hashCode ^
-        phoneOfContractPerson.hashCode ^
         address.hashCode ^
-        points.hashCode ^
-        classInfo.hashCode;
+        email.hashCode ^
+        mainContract.hashCode ^
+        mainContractPhone.hashCode ^
+        mainContractEmail.hashCode;
   }
 }
-
-
-// List<Student> studentsData = List.generate(
-//   15,
-//   (index) {
-//     return Student(
-//       id: (index + 1).toString(),
-//       classId: "ClassA",
-//       otherClassId: "ClassB",
-//       name: "Student ${index + 1}",
-//       gender: (index % 2 == 0) ? "Male" : "Female",
-//       percent: (index + 1) * 10,
-//       phoneNumber: "123456789${index + 1}",
-//       dob: "2000-0$index-01",
-//       contractPerson: "Parent",
-//       phoneOfContractPerson: "987654321",
-//       address: "Address ${index + 1} Street ${index + 1} , City ${index + 1}",
-//       classInfo: classesDumpy[index % 2],
-//     );
-//   },
-// );

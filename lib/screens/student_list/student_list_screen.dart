@@ -51,6 +51,21 @@ class StudentListScreen extends ConsumerWidget with Utils {
       body: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
+          Text('Ngày: ', style: AppTextStyles.defaultMedium),
+          Padding(
+            padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 8),
+            child: Row(
+              children: [
+                Text(
+                  'Tổng số: ${state.students.length}',
+                  style: AppTextStyles.defaultMedium,
+                ),
+                const Spacer(),
+                Text('Đã điểm danh: ${state.lsCheckin.length}',
+                    style: AppTextStyles.defaultMedium),
+              ],
+            ),
+          ),
           Expanded(
             child: ListView.builder(
               itemCount: state.students.length,
@@ -114,7 +129,7 @@ class StudentListScreen extends ConsumerWidget with Utils {
                                                   SvgPicture.asset(
                                                     state.students[index]
                                                                 .gender ==
-                                                            'Male'
+                                                            'male'
                                                         ? Assets.svg.icMale.path
                                                         : Assets
                                                             .svg.icFemale.path,
