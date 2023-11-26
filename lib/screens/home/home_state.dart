@@ -8,6 +8,7 @@ class HomeState with _$HomeState {
   factory HomeState({
     @Default(false) success,
     @Default(false) loadingIndicator,
+    @Default(0) int currentIndex,
     @Default(<Grade>[]) List<Grade> lsGrade,
   }) = _HomeState;
 }

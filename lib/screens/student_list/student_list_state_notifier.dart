@@ -9,6 +9,8 @@ import 'package:students/models/point.dart';
 import 'package:students/models/student.dart';
 import 'package:students/screens/student_list/student_list_state.dart';
 
+import 'package:flutter_easyloading/flutter_easyloading.dart';
+
 final studentLsitProvider = StateNotifierProviderFamily<
     StudentListStateNotifier, StudentListState, Class?>((ref, classData) {
   return StudentListStateNotifier(ref, classData);
@@ -17,13 +19,13 @@ final studentLsitProvider = StateNotifierProviderFamily<
 class StudentListStateNotifier extends StateNotifier<StudentListState> {
   StudentListStateNotifier(this.ref, this.classData)
       : super(StudentListState()) {
-    _getAllStudent();
+    getAllStudent();
   }
 
   Ref ref;
   final Class? classData;
 
-  Future<void> _getAllStudent() async {
+  Future<void> getAllStudent() async {
     try {
       state = state.copyWith(showLoadingIndicator: true);
       final result = await apiClient(ref)
@@ -71,22 +73,41 @@ class StudentListStateNotifier extends StateNotifier<StudentListState> {
     state = state.copyWith(selectDate: date);
   }
 
-  void updateStudentPoint(Student? studentUpadte, String? note) {
-    final newPoint = StudentPoint(
-      createAt: (state.selectDate ?? DateTime.now()).toString(),
-      noise: state.noiseLevel,
-      takeGood: state.goodTakeLevel,
-      note: note,
-    );
-    if (studentUpadte == null) {
-      return;
+  void updateStudentPoint(Student? studentUpadte, String? note) {}
+
+  Future<void> createStudentPoint({
+    int? studentId,
+    String? speech,
+    String? pressPosition,
+    String? noise,
+    String? goodTake,
+    String? beats,
+    String? note,
+  }) async {
+    try {
+      final params = {
+        'student_id': studentId,
+        'speech': speech,
+        'press_position': pressPosition,
+        'noise': noise,
+        'good_take': goodTake,
+        'beats': beats,
+        'date': state.selectDate != null
+            ? state.selectDate.toString()
+            : DateTime.now().toString(),
+        'note': note,
+      };
+      final result = await apiClient(ref).postRequest(
+        ApiEndpoints.studentPoint,
+        params: params,
+        isAuthorized: true,
+      );
+      if (result is! ApiResponse || !result.success) {
+        return;
+      }
+      EasyLoading.showSuccess('Success!');
+    } catch (e) {
+      log(e.toString());
     }
-    final indexOfStudent = state.students.indexOf(studentUpadte);
-
-    // final update = student.copyWith(
-    //   points: [...student.points ?? [], newPoint],
-    // );
-
-    state = state.copyWith(students: state.students);
   }
 }

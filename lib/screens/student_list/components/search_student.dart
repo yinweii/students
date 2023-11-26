@@ -4,7 +4,7 @@ import 'package:flutter_svg/svg.dart';
 import 'package:percent_indicator/linear_percent_indicator.dart';
 import 'package:students/generated/assets.gen.dart';
 import 'package:students/models/student.dart';
-import 'package:students/screens/student_detail/student_detail.dart';
+import 'package:students/screens/student_detail/student_detail_screen.dart';
 import 'package:students/screens/student_list/components/point_form.dart';
 import 'package:students/utils/app_colors.dart';
 import 'package:students/utils/app_text_style.dart';
@@ -12,6 +12,8 @@ import 'package:students/utils/dialog.dart';
 import 'package:students/utils/utils.dart';
 
 class CustomSearchDelegate extends SearchDelegate<String> with Utils {
+  CustomSearchDelegate({required this.students});
+  final List<Student> students;
   // These methods are mandatory you cannot skip them.
   @override
   @override
@@ -41,7 +43,7 @@ class CustomSearchDelegate extends SearchDelegate<String> with Utils {
 
   @override
   Widget buildResults(BuildContext context) {
-    final results = []
+    final results = students
         .where((item) => item.name!.toLowerCase().contains(query.toLowerCase()))
         .toList();
     if (results.isEmpty) {
@@ -112,8 +114,6 @@ class CustomSearchDelegate extends SearchDelegate<String> with Utils {
                                     const SizedBox(
                                       width: 30,
                                     ),
-                                    Text(
-                                        'Lớp: ${results[index].classInfo.className}')
                                   ],
                                 ),
                               ),

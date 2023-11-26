@@ -5,10 +5,12 @@ import 'package:dotted_border/dotted_border.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_svg/svg.dart';
+import 'package:students/common/core/routes.dart';
+import 'package:students/common/core/session/session_state_notifier.dart';
 import 'package:students/generated/assets.gen.dart';
 
 import 'package:students/models/category.dart';
-import 'package:students/screens/all_student_info.dart/all_student_info.dart';
+import 'package:students/screens/all_student_info.dart/all_student_info_screen.dart';
 import 'package:students/screens/class_list/class_list_screen.dart';
 import 'package:students/screens/create_student/create_student_screen.dart';
 
@@ -35,13 +37,13 @@ class _HomeScreenState extends ConsumerState<HomeScreen>
     // TODO: implement initState
     super.initState();
     _tabController = TabController(length: 2, vsync: this);
+    _tabController.addListener(() {
+      ref.read(homeProvider.notifier).onUpdateTab(_tabController.index);
+    });
   }
 
   @override
   Widget build(BuildContext context) {
-    // TextEditingController controller = TextEditingController();
-    final state = ref.watch(homeProvider);
-    final notifier = ref.read(homeProvider.notifier);
     return WillPopScope(
       onWillPop: () async {
         return false;
@@ -110,31 +112,32 @@ class _HomeScreenState extends ConsumerState<HomeScreen>
                 ],
               ),
             ),
-            TabBar(
-              unselectedLabelColor: Colors.black,
-              labelColor: Colors.red,
-              onTap: (index) {
-                log('message: $index');
-              },
-              padding: EdgeInsets.only(top: screenHeight(context) * 0.3),
-              tabs: const [
-                Tab(
-                  icon: Icon(
-                    Icons.person,
+            SizedBox(
+              child: TabBar(
+                unselectedLabelColor: Colors.black,
+                labelColor: Colors.red,
+                onTap: (index) {
+                  log('message: $index');
+                },
+                padding: EdgeInsets.only(top: screenHeight(context) * 0.3),
+                tabs: const [
+                  Tab(
+                    icon: Icon(
+                      Icons.person,
+                    ),
+                    text: 'Chính quy',
                   ),
-                  text: 'Chính quy',
-                ),
-                Tab(
-                  icon: Icon(
-                    Icons.group,
+                  Tab(
+                    icon: Icon(
+                      Icons.group,
+                    ),
+                    text: 'Dạy thêm',
                   ),
-                  text: 'Dạy thêm',
-                ),
-              ],
-              controller: _tabController,
-              indicatorSize: TabBarIndicatorSize.tab,
+                ],
+                controller: _tabController,
+                indicatorSize: TabBarIndicatorSize.tab,
+              ),
             ),
-
             Container(
               padding: EdgeInsets.only(top: screenHeight(context) * 0.08),
               child: TabBarView(
@@ -256,31 +259,26 @@ class _HomeScreenState extends ConsumerState<HomeScreen>
                 ],
               ),
             ),
-
-            // Container(
-            //   margin: EdgeInsets.only(top: screenHeight(context) * 0.3),
-            //   height: double.infinity,
-            //   padding: const EdgeInsets.symmetric(horizontal: 16),
-            //   child: GridView.count(
-            //     physics: const NeverScrollableScrollPhysics(),
-            //     crossAxisCount: 3,
-            //     mainAxisSpacing: 30,
-            //     crossAxisSpacing: 10,
-            //     childAspectRatio: 0.86,
-            //     shrinkWrap: true,
-            //     children: listCategory
-            //         .map(
-            //           (item) => SizedBox(
-            //             height: 250,
-            //             child: GestureDetector(
-            //               onTap: () => _handleOnTap(item.type),
-            //               child: CategoryItem(category: item),
-            //             ),
-            //           ),
-            //         )
-            //         .toList(),
-            //   ),
-            // ),
+            Positioned(
+              right: 20,
+              top: 60,
+              child: GestureDetector(
+                onTap: () async {
+                  await ref.read(sessionProvider.notifier).signOut();
+                  if (!mounted) {
+                    return;
+                  }
+                  await pushNamedAndRemoveUntil(context, Routes.loginScreen);
+                },
+                child: SvgPicture.asset(
+                  Assets.svg.icSignOut.path,
+                  colorFilter: const ColorFilter.mode(
+                    AppColors.primaryBtn,
+                    BlendMode.srcIn,
+                  ),
+                ),
+              ),
+            ),
           ],
         ),
       ),

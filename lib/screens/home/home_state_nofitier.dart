@@ -11,22 +11,11 @@ final homeProvider = StateNotifierProvider<HomeStateNotifier, HomeState>((ref) {
 });
 
 class HomeStateNotifier extends StateNotifier<HomeState> {
-  HomeStateNotifier(this.ref) : super(HomeState()) {
-    // ref
-    //     .read(dashboardNotifierProvider.notifier)
-    //     .addRefreshListener(DashboardItem.home, (_) {});
-  }
+  HomeStateNotifier(this.ref) : super(HomeState());
 
   final Ref ref;
 
-  void addNewGrand(String grandName) async {
-    final grand = Grade(
-      id: Random().nextInt(100).toString(),
-      name: grandName,
-      totalClass: Random().nextInt(4) + 2,
-    );
-    state = state.copyWith(
-      lsGrade: [...state.lsGrade, grand],
-    );
+  void onUpdateTab(int index) {
+    state = state.copyWith(currentIndex: index);
   }
 }

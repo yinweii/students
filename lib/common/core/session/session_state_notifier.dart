@@ -19,4 +19,10 @@ class SessionStateNotifier extends StateNotifier<SessionState> {
     await SecureStorage.saveToken(token);
     await LocalStorage.saveAppUser(appUser);
   }
+
+  Future<void> signOut() async {
+    await SecureStorage.clearToken();
+    await LocalStorage.clearAppUser();
+    
+  }
 }

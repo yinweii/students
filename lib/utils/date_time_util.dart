@@ -18,7 +18,10 @@ class DateTimeUtil {
     return DateFormat("yyyy-MM-dd").format(dateTime);
   }
 
-  static String fromatDate(DateTime date) {
+  static String fromatDate(DateTime? date) {
+    if (date == null) {
+      return '';
+    }
     return DateFormat("dd-MM-yyyy").format(date);
   }
 }

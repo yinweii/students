@@ -4,5 +4,6 @@ class ApiEndpoints {
   static const login = '/auth/login';
   static const classApi = '/class';
   static const student = '/student';
+  static const studentPoint = '/student-point';
  
 }

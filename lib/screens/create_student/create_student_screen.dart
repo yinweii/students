@@ -7,6 +7,7 @@ import 'package:students/components/common_button.dart';
 import 'package:students/components/input_form.dart';
 import 'package:students/components/text_form_field.dart';
 import 'package:students/models/class_model.dart';
+import 'package:students/models/student_detail.dart';
 import 'package:students/screens/create_student/create_student_state_notifier.dart';
 import 'package:students/utils/app_colors.dart';
 import 'package:students/utils/app_text_style.dart';
@@ -15,7 +16,8 @@ import 'package:students/utils/utils.dart';
 import 'package:flutter_rounded_date_picker/flutter_rounded_date_picker.dart';
 
 class CreateStudentScreen extends ConsumerStatefulWidget {
-  const CreateStudentScreen({super.key});
+  const CreateStudentScreen({super.key, this.student});
+  final StudentDetail? student;
 
   @override
   ConsumerState<ConsumerStatefulWidget> createState() =>
@@ -35,13 +37,20 @@ class _CreateStudentScreenState extends ConsumerState<CreateStudentScreen>
   @override
   void initState() {
     super.initState();
-    _nameController = TextEditingController();
-    _phoneNumberController = TextEditingController();
-    _emailController = TextEditingController();
-    _addressController = TextEditingController();
-    _nameOfContractController = TextEditingController();
-    _phoneOfContractController = TextEditingController();
-    _emailOfContractController = TextEditingController();
+    _nameController = TextEditingController()
+      ..text = widget.student?.name ?? '';
+    _phoneNumberController = TextEditingController()
+      ..text = widget.student?.phone ?? '';
+    _emailController = TextEditingController()
+      ..text = widget.student?.email ?? '';
+    _addressController = TextEditingController()
+      ..text = widget.student?.address ?? '';
+    _nameOfContractController = TextEditingController()
+      ..text = widget.student?.mainContract ?? '';
+    _phoneOfContractController = TextEditingController()
+      ..text = widget.student?.mainContractPhone ?? '';
+    _emailOfContractController = TextEditingController()
+      ..text = widget.student?.mainContractEmail ?? '';
   }
 
   @override
@@ -58,8 +67,10 @@ class _CreateStudentScreenState extends ConsumerState<CreateStudentScreen>
 
   @override
   Widget build(BuildContext context) {
-    final state = ref.watch(createStudentProvider);
-    final notifier = ref.read(createStudentProvider.notifier);
+    final agrument =
+        ModalRoute.of(context)?.settings.arguments as StudentDetail?;
+    final state = ref.watch(createStudentProvider(agrument));
+    final notifier = ref.read(createStudentProvider(agrument).notifier);
     return Scaffold(
       appBar: CommonAppbar(
         title: 'Thông tin học sinh',
@@ -69,10 +80,11 @@ class _CreateStudentScreenState extends ConsumerState<CreateStudentScreen>
         padding: const EdgeInsets.all(16).copyWith(bottom: 24),
         child: CommonButton(
           height: 56,
-          bgColor: AppColors.bgNav,
-          label: 'Lưu thông tin',
+          bgColor: AppColors.primaryBtn,
+          label: agrument == null ? 'Lưu thông tin' : 'Cập nhập thông tin',
           onTap: () async {
-            await notifier.createStudent(
+            final result = await notifier.createStudent(
+              isUpdate: agrument != null,
               name: _nameController.text,
               dob: state.selectDatetime.toString(),
               phone: _phoneNumberController.text,
@@ -82,6 +94,11 @@ class _CreateStudentScreenState extends ConsumerState<CreateStudentScreen>
               mainContractPhone: _phoneOfContractController.text,
               mainContractEmail: _emailOfContractController.text,
             );
+            if (agrument != null && result) {
+              if (mounted) {
+                Navigator.pop(context, agrument.id);
+              }
+            }
           },
         ),
       ),

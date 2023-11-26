@@ -23,11 +23,17 @@ class PointForm extends ConsumerStatefulWidget {
 
 class _PointFormState extends ConsumerState<PointForm> with Utils {
   late TextEditingController noteController;
+  late TextEditingController speechController;
+  late TextEditingController pressPositionController;
+  late TextEditingController beatsController;
   @override
   void initState() {
     // TODO: implement initState
     super.initState();
     noteController = TextEditingController();
+    speechController = TextEditingController();
+    pressPositionController = TextEditingController();
+    beatsController = TextEditingController();
   }
 
   @override
@@ -35,6 +41,15 @@ class _PointFormState extends ConsumerState<PointForm> with Utils {
     // TODO: implement dispose
     super.dispose();
     noteController
+      ..clear()
+      ..dispose();
+    speechController
+      ..clear()
+      ..dispose();
+    pressPositionController
+      ..clear()
+      ..dispose();
+    beatsController
       ..clear()
       ..dispose();
   }
@@ -82,19 +97,37 @@ class _PointFormState extends ConsumerState<PointForm> with Utils {
                 ),
                 _buildListTilte(
                   title: 'Thuộc bài',
-                  trailing: const SizedBox.shrink(),
+                  trailing: SizedBox(
+                    width: 80,
+                    child: TextFormFieldCustom(
+                      controller: speechController,
+                      maxLines: 1,
+                    ),
+                  ),
                   onTap: () {},
                 ),
                 const Divider(),
                 _buildListTilte(
                   title: 'Thế bấm',
-                  trailing: const SizedBox.shrink(),
+                  trailing: SizedBox(
+                    width: 80,
+                    child: TextFormFieldCustom(
+                      controller: pressPositionController,
+                      maxLines: 1,
+                    ),
+                  ),
                   onTap: () {},
                 ),
                 const Divider(),
                 _buildListTilte(
                   title: 'Nhịp phách',
-                  trailing: const SizedBox.shrink(),
+                  trailing: SizedBox(
+                    width: 80,
+                    child: TextFormFieldCustom(
+                      controller: beatsController,
+                      maxLines: 1,
+                    ),
+                  ),
                   onTap: () {},
                 ),
                 const Divider(),
@@ -129,10 +162,18 @@ class _PointFormState extends ConsumerState<PointForm> with Utils {
                   padding: const EdgeInsets.all(16),
                   child: CommonButton(
                     label: 'Hoàn thành',
-                    onTap: () {
-                      notifier.updateStudentPoint(
-                          widget.student, noteController.text);
-                      Navigator.pop(context);
+                    onTap: () async {
+                      await notifier
+                          .createStudentPoint(
+                            studentId: int.tryParse(widget.student?.id ?? ''),
+                            speech: speechController.text,
+                            pressPosition: pressPositionController.text,
+                            noise: state.noiseLevel.toString(),
+                            goodTake: state.goodTakeLevel.toString(),
+                            beats: beatsController.text,
+                            note: noteController.text,
+                          )
+                          .then((value) => Navigator.pop(context));
                     },
                   ),
                 )

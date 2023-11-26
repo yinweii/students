@@ -3,6 +3,7 @@ import 'dart:convert';
 import 'dart:developer';
 import 'dart:io';
 
+import 'package:flutter/foundation.dart';
 import 'package:students/api/api_endpoints.dart';
 import 'package:students/api/api_response/api_response.dart';
 import 'package:students/common/core/constants.dart';
@@ -68,12 +69,14 @@ class ApiClient extends StateNotifier<EnvState> {
       headers.addAll(addHeaders);
     }
 
-    _logRequest(
-      headers: headers,
-      type: 'GET',
-      url: uri,
-      params: params,
-    );
+    if (kDebugMode) {
+      _logRequest(
+        headers: headers,
+        type: 'GET',
+        url: uri,
+        params: params,
+      );
+    }
 
     final result = http
         .get(
@@ -101,13 +104,14 @@ class ApiClient extends StateNotifier<EnvState> {
     );
 
     final uri = Uri.parse(state.baseUrlApi + endpoint);
-
-    _logRequest(
-      headers: headers,
-      type: 'POST',
-      url: uri,
-      params: params,
-    );
+    if (kDebugMode) {
+      _logRequest(
+        headers: headers,
+        type: 'POST',
+        url: uri,
+        params: params,
+      );
+    }
 
     final result = http
         .post(
@@ -330,6 +334,10 @@ class ApiClient extends StateNotifier<EnvState> {
         // The login id has already been taken
         case 422:
           String error = onError.validateErrorMsg();
+          Dialogs(context).showError(error);
+          break;
+        case 404:
+          String error = onError.data['message'];
           Dialogs(context).showError(error);
           break;
 

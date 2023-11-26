@@ -6,11 +6,9 @@ import 'package:students/api/api_client.dart';
 import 'package:students/api/api_endpoints.dart';
 import 'package:students/api/api_response/api_response.dart';
 import 'package:students/api/network_resource_state/network_resource_state.dart';
-import 'package:students/common/core/constants.dart';
-import 'package:students/models/category.dart';
 import 'package:students/models/class_model.dart';
 import 'package:students/screens/class_list/class_list_state.dart';
-import 'package:uuid/uuid.dart';
+import 'package:students/screens/home/home_state_nofitier.dart';
 
 final classListProvider =
     StateNotifierProvider.autoDispose<ClassListStateNotifier, ClassListState>(
@@ -21,15 +19,18 @@ final classListProvider =
 class ClassListStateNotifier extends StateNotifier<ClassListState> {
   ClassListStateNotifier(this.ref) : super(ClassListState()) {
     _getAllClass();
-    // state = state.copyWith(classes: classesDumpy);
   }
   Ref ref;
 
   Future<void> _getAllClass() async {
     try {
       state = state.copyWith(lsClass: const NetworkResourceState.loading());
-      final result = await apiClient(ref)
-          .getRequest(ApiEndpoints.classApi, isAuthorized: true);
+      final xx = ref.watch(homeProvider);
+      final type = xx.currentIndex == 0 ? 'official' : 'other';
+      final result = await apiClient(ref).getRequest(
+        '${ApiEndpoints.classApi}?type=$type',
+        isAuthorized: true,
+      );
       if (result is! ApiResponse || !result.success) {
         return;
       }
@@ -66,7 +67,6 @@ class ClassListStateNotifier extends StateNotifier<ClassListState> {
     }
   }
 }
-
 
 extension ColorExtension on String {
   toColor() {

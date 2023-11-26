@@ -6,22 +6,43 @@ import 'package:students/api/api_endpoints.dart';
 import 'package:students/api/api_response/api_response.dart';
 import 'package:students/models/class_model.dart';
 import 'package:students/models/student.dart';
+import 'package:students/models/student_detail.dart';
 import 'package:students/screens/create_student/create_student_state.dart';
 import 'package:flutter_easyloading/flutter_easyloading.dart';
 
 enum Gender { male, female }
 
-final createStudentProvider =
-    StateNotifierProvider<CreateStudentStateNotifier, CreateStudentState>(
-        (ref) {
-  return CreateStudentStateNotifier(ref);
+final createStudentProvider = StateNotifierProvider.family.autoDispose<
+    CreateStudentStateNotifier,
+    CreateStudentState,
+    StudentDetail?>((ref, student) {
+  return CreateStudentStateNotifier(ref, student);
 });
 
 class CreateStudentStateNotifier extends StateNotifier<CreateStudentState> {
-  CreateStudentStateNotifier(this.ref) : super(CreateStudentState()) {
+  CreateStudentStateNotifier(this.ref, this.student)
+      : super(CreateStudentState()) {
     _getAllClass();
   }
   Ref ref;
+  final StudentDetail? student; 
+
+  void _init() {
+    if (student == null) {
+      return;
+    }
+    state = state.copyWith(
+      selectDatetime:
+          student?.dob != null ? DateTime.parse(student?.dob ?? '') : null,
+      selectGender: student?.gender != null
+          ? Gender.values.byName(student!.gender!)
+          : state.selectGender,
+      classType: student?.classType != null
+          ? _classTypeByName(student!.classType!)
+          : state.classType,
+      onSelectClass: _class(student?.classInfo?.id),
+    );
+  }
 
   Future<void> _getAllClass() async {
     try {
@@ -35,13 +56,15 @@ class CreateStudentStateNotifier extends StateNotifier<CreateStudentState> {
           .map((e) => Class.fromMap(e as Map<String, dynamic>))
           .toList();
       state = state.copyWith(classes: classes);
+      _init();
     } catch (e) {
       log(e.toString());
       state = state.copyWith(classes: []);
     }
   }
 
-  Future<void> createStudent({
+  Future<bool> createStudent({
+    bool isUpdate = false,
     String? name,
     String? dob,
     String? phone,
@@ -64,6 +87,24 @@ class CreateStudentStateNotifier extends StateNotifier<CreateStudentState> {
       mainContractPhone: mainContractPhone,
       mainContractEmail: mainContractEmail,
     );
+    if (isUpdate) {
+      try {
+        final result = await apiClient(ref).patchRequest(
+          '${ApiEndpoints.student}/${student?.id}',
+          params: newStudent.toMap(),
+          isAuthorized: true,
+        );
+        if (result is! ApiResponse || !result.success) {
+          EasyLoading.showError('something wrong :(');
+          return false;
+        }
+        EasyLoading.showSuccess('Success!');
+        return true;
+      } catch (e) {
+        EasyLoading.showError(e.toString());
+        return false;
+      }
+    }
 
     try {
       final result = await apiClient(ref).postRequest(
@@ -72,11 +113,13 @@ class CreateStudentStateNotifier extends StateNotifier<CreateStudentState> {
         isAuthorized: true,
       );
       if (result is! ApiResponse || !result.success) {
-        return;
+        return false;
       }
       EasyLoading.showSuccess('Success!');
+      return true;
     } catch (e) {
       EasyLoading.showError(e.toString());
+      return false;
     }
   }
 
@@ -94,6 +137,14 @@ class CreateStudentStateNotifier extends StateNotifier<CreateStudentState> {
 
   void onSelectDatetime(DateTime? datetime) {
     state = state.copyWith(selectDatetime: datetime);
+  }
+
+  ClassType _classTypeByName(String name) {
+    return classTypeDumy.firstWhere((element) => element.value == name);
+  }
+
+  Class _class(String? id) {
+    return state.classes.firstWhere((element) => element.id == id);
   }
 }
 

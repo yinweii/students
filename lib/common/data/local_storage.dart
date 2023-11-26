@@ -12,6 +12,11 @@ class LocalStorage {
     final value = jsonEncode(appUser?.toJson());
     await prefs.setString(_keyAppUser, value);
   }
+  static Future<void> clearAppUser() async {
+    final prefs = await SharedPreferences.getInstance();
+    
+    await prefs.remove(_keyAppUser);
+  }
 
   /// Get - Save User Detail
   static Future<AppUser?> getUserDetail() async {
