@@ -4,6 +4,7 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:students/api/api_client.dart';
 import 'package:students/api/api_endpoints.dart';
 import 'package:students/api/api_response/api_response.dart';
+import 'package:students/common/core/check_in/check_in_state_notifier.dart';
 import 'package:students/models/class_model.dart';
 import 'package:students/models/point.dart';
 import 'package:students/models/student.dart';
@@ -45,11 +46,25 @@ class StudentListStateNotifier extends StateNotifier<StudentListState> {
     }
   }
 
-  void onCheckIn(Student student) {
-    if (state.lsCheckin.contains(student)) {
-      state = state.copyWith(lsCheckin: [...state.lsCheckin]..remove(student));
-    } else {
+  Future<void> onCheckIn(Student student) async {
+    final result = await ref.read(checkinProvider.notifier).checkin(
+          classId: int.parse(classData?.id ?? ''),
+          studentId: int.parse(student.id ?? ''),
+          checkinTime: state.selectDate != null
+              ? state.selectDate.toString()
+              : DateTime.now().toString(),
+        );
+    if (result) {
       state = state.copyWith(lsCheckin: [...state.lsCheckin, student]);
+    }
+  }
+
+  Future<void> onUnCheckIn(Student student) async {
+    final result = await ref.read(checkinProvider.notifier).unCheck(
+          int.parse(student.id ?? ''),
+        );
+    if (result) {
+      state = state.copyWith(lsCheckin: [...state.lsCheckin]..remove(student));
     }
   }
 

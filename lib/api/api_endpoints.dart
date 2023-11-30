@@ -5,5 +5,6 @@ class ApiEndpoints {
   static const classApi = '/class';
   static const student = '/student';
   static const studentPoint = '/student-point';
+  static const checkIn = '/checkin';
  
 }

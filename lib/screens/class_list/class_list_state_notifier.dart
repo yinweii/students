@@ -51,7 +51,11 @@ class ClassListStateNotifier extends StateNotifier<ClassListState> {
   }
 
   Future<void> createNewClass(Class newClass) async {
-    final param = {"name": 'Lớp 6A3', "total": 22, "type": "official"};
+    final param = {
+      "name": newClass.name,
+      "total": newClass.total,
+      "type": "official"
+    };
     try {
       final result = await apiClient(ref).postRequest(
         ApiEndpoints.classApi,

@@ -1,5 +1,3 @@
-import 'dart:math';
-
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_svg/svg.dart';
@@ -187,8 +185,15 @@ class StudentListScreen extends ConsumerWidget with Utils {
                                                 width: 30,
                                               ),
                                               GestureDetector(
-                                                onTap: () => notifier.onCheckIn(
-                                                    state.students[index]),
+                                                onTap: () async => state
+                                                        .lsCheckin
+                                                        .contains(state
+                                                            .students[index])
+                                                    ? await notifier
+                                                        .onUnCheckIn(state
+                                                            .students[index])
+                                                    : await notifier.onCheckIn(
+                                                        state.students[index]),
                                                 child: Icon(
                                                   state.lsCheckin.contains(
                                                           state.students[index])
