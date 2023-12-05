@@ -30,10 +30,10 @@ class StudentListStateNotifier extends StateNotifier<StudentListState> {
   Future<void> getAllStudent() async {
     try {
       state = state.copyWith(showLoadingIndicator: true);
-      final result = await apiClient(ref)
-          .getRequest(ApiEndpoints.student, isAuthorized: true, params: {
-        'classId': classData?.id,
-      });
+      final result = await apiClient(ref).getRequest(
+        '${ApiEndpoints.student}?classId=${classData?.id}',
+        isAuthorized: true,
+      );
       if (result is! ApiResponse || !result.success) {
         return;
       }
@@ -56,7 +56,8 @@ class StudentListStateNotifier extends StateNotifier<StudentListState> {
               : DateTime.now().toString(),
         );
     if (result != null) {
-      final studentUpdate = student.copyWith(checkin: [result]);
+      final studentUpdate =
+          student.copyWith(checkin: [...student.checkin ?? [], result]);
       final index = state.students.indexWhere(
         (element) => element.id == student.id,
       );

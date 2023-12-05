@@ -30,6 +30,7 @@ class StudentListScreen extends ConsumerWidget with Utils {
   Widget build(BuildContext context, WidgetRef ref) {
     final state = ref.watch(studentLsitProvider(classData));
     final notifier = ref.read(studentLsitProvider(classData).notifier);
+
     return Scaffold(
       appBar: CommonAppbar(
         title: 'Danh sách(${classData?.name})',
@@ -103,8 +104,9 @@ class StudentListScreen extends ConsumerWidget with Utils {
                     style: AppTextStyles.defaultMedium,
                   ),
                   const Spacer(),
-                  Text('Đã điểm danh: ${state.lsCheckin.length}',
-                      style: AppTextStyles.defaultMedium),
+                  // TODO: fix total
+                  // Text('Đã điểm danh: $total',
+                  //     style: AppTextStyles.defaultMedium),
                 ],
               ),
             ),
@@ -227,18 +229,16 @@ class StudentListScreen extends ConsumerWidget with Utils {
                                   padding: const EdgeInsets.only(top: 16),
                                   child: LinearPercentIndicator(
                                     width: 150.0,
-                                    animation: true,
-                                    animationDuration: 1000,
+                                    animateFromLastPercent: true,
+                                    animationDuration: 500,
                                     lineHeight: 15.0,
-                                    percent: state.lsCheckin
-                                            .contains(state.students[index])
-                                        ? 0.3
-                                        : 0.2,
-                                    center: Text(state.lsCheckin
-                                            .contains(state.students[index])
-                                        ? '3/10'
-                                        : ' 2/10'),
-                                    progressColor: Colors.red,
+                                    percent: (state.students[index].checkin
+                                                ?.length ??
+                                            10) /
+                                        10,
+                                    center: Text(
+                                        '${state.students[index].checkin?.length ?? 0} / 10 '),
+                                    progressColor: Colors.green,
                                   ),
                                 ),
                               ),
