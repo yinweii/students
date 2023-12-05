@@ -6,6 +6,7 @@ import 'package:students/components/input_form.dart';
 import 'package:students/components/text_form_field.dart';
 import 'package:students/generated/assets.gen.dart';
 import 'package:students/models/student.dart';
+import 'package:students/models/student_detail.dart';
 import 'package:students/screens/student_list/student_list_state_notifier.dart';
 import 'package:students/utils/app_colors.dart';
 import 'package:students/utils/app_text_style.dart';
@@ -15,7 +16,7 @@ import 'package:flutter_rounded_date_picker/flutter_rounded_date_picker.dart';
 
 class PointForm extends ConsumerStatefulWidget {
   const PointForm({super.key, this.student});
-  final Student? student;
+  final StudentDetail? student;
 
   @override
   ConsumerState<ConsumerStatefulWidget> createState() => _PointFormState();

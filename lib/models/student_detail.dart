@@ -2,6 +2,7 @@
 import 'dart:convert';
 
 import 'package:flutter/foundation.dart';
+import 'package:students/models/checkin.dart';
 
 import 'package:students/models/class_model.dart';
 import 'package:students/models/point.dart';
@@ -24,6 +25,7 @@ class StudentDetail {
   final String? updatedAt;
   final Class? classInfo;
   final List<StudentPoint>? points;
+  List<CheckIn>? checkin;
 
   StudentDetail({
     this.id,
@@ -43,6 +45,7 @@ class StudentDetail {
     this.updatedAt,
     this.classInfo,
     this.points,
+    this.checkin,
   });
   StudentDetail copyWith({
     String? id,
@@ -62,6 +65,7 @@ class StudentDetail {
     String? updatedAt,
     Class? classInfo,
     List<StudentPoint>? points,
+    List<CheckIn>? checkin,
   }) =>
       StudentDetail(
         id: id ?? this.id,
@@ -81,6 +85,7 @@ class StudentDetail {
         updatedAt: updatedAt ?? this.updatedAt,
         classInfo: classInfo ?? this.classInfo,
         points: points ?? this.points,
+        checkin: checkin ?? this.checkin,
       );
 
   Map<String, dynamic> toMap() {
@@ -102,6 +107,7 @@ class StudentDetail {
       'updated_at': updatedAt,
       'classInfo': classInfo?.toMap(),
       'points': points?.map((x) => x.toMap()).toList(),
+      'checkin': checkin?.map((x) => x.toMap()).toList(),
     };
   }
 
@@ -134,6 +140,13 @@ class StudentDetail {
           ? List<StudentPoint>.from(
               (map['points'] as List<dynamic>).map<StudentPoint?>(
                 (x) => StudentPoint.fromMap(x as Map<String, dynamic>),
+              ),
+            )
+          : null,
+      checkin: map['checkin'] != null
+          ? List<CheckIn>.from(
+              (map['checkin'] as List<dynamic>).map<CheckIn?>(
+                (x) => CheckIn.fromMap(x as Map<String, dynamic>),
               ),
             )
           : null,

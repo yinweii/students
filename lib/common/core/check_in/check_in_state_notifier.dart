@@ -5,6 +5,7 @@ import 'package:students/api/api_client.dart';
 import 'package:students/api/api_endpoints.dart';
 import 'package:students/api/api_response/api_response.dart';
 import 'package:students/common/core/check_in/check_in_state.dart';
+import 'package:students/models/checkin.dart';
 
 final checkinProvider =
     StateNotifierProvider<CheckInStateNotifier, CheckInState>((ref) {
@@ -16,7 +17,7 @@ class CheckInStateNotifier extends StateNotifier<CheckInState> {
 
   Ref ref;
 
-  Future<bool> checkin({
+  Future<CheckIn?> checkin({
     required int classId,
     required int studentId,
     String? checkinTime,
@@ -28,16 +29,17 @@ class CheckInStateNotifier extends StateNotifier<CheckInState> {
         params: {
           'student_id': studentId,
           'class_id': classId,
-          'checkin_time': checkinTime ,
+          'checkin_time': checkinTime,
         },
       );
       if (result is! ApiResponse || !result.success) {
-        return false;
+        return null;
       }
-      return true;
+      final checkin = CheckIn.fromMap(result.data as Map<String, dynamic>);
+      return checkin;
     } catch (e) {
       log(e.toString());
-      return false;
+      return null;
     }
   }
 

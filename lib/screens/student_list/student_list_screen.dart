@@ -15,9 +15,12 @@ import 'package:students/screens/student_list/student_list_state_notifier.dart';
 import 'package:students/utils/app_colors.dart';
 import 'package:students/utils/app_text_style.dart';
 import 'package:students/utils/date_time_util.dart';
+import 'package:students/utils/datetime_extention.dart';
 import 'package:students/utils/dialog.dart';
 import 'package:students/utils/utils.dart';
 import 'package:flutter_rounded_date_picker/flutter_rounded_date_picker.dart';
+
+import 'package:collection/collection.dart';
 
 class StudentListScreen extends ConsumerWidget with Utils {
   final Class? classData;
@@ -110,6 +113,13 @@ class StudentListScreen extends ConsumerWidget with Utils {
                 itemCount: state.students.length,
                 shrinkWrap: true,
                 itemBuilder: (context, index) {
+                  final isCheckIn =
+                      ((state.students[index].checkin ?? [])).firstWhereOrNull(
+                    (element) => DateTime.parse(
+                            element.checkinTime ?? element.createdAt ?? '')
+                        .isSameDay(state.selectDate ?? DateTime.now()),
+                  );
+
                   return GestureDetector(
                     onTap: () => push(context, const StudentDetailScreen(),
                         settings: RouteSettings(
@@ -185,18 +195,17 @@ class StudentListScreen extends ConsumerWidget with Utils {
                                                 width: 30,
                                               ),
                                               GestureDetector(
-                                                onTap: () async => state
-                                                        .lsCheckin
-                                                        .contains(state
-                                                            .students[index])
-                                                    ? await notifier
-                                                        .onUnCheckIn(state
-                                                            .students[index])
-                                                    : await notifier.onCheckIn(
-                                                        state.students[index]),
+                                                onTap: () async {
+                                                  if (isCheckIn == null) {
+                                                    await notifier.onCheckIn(
+                                                        state.students[index]);
+                                                    return;
+                                                  }
+                                                  await notifier
+                                                      .onUnCheckIn(isCheckIn);
+                                                },
                                                 child: Icon(
-                                                  state.lsCheckin.contains(
-                                                          state.students[index])
+                                                  isCheckIn != null
                                                       ? Icons
                                                           .radio_button_checked
                                                       : Icons
@@ -241,10 +250,11 @@ class StudentListScreen extends ConsumerWidget with Utils {
                             child: GestureDetector(
                               onTap: () async {
                                 await ShowSimpleDialog.topShowGeneralDialog(
-                                    context,
-                                    childWidget: PointForm(
-                                      student: state.students[index],
-                                    ));
+                                  context,
+                                  childWidget: PointForm(
+                                    student: state.students[index],
+                                  ),
+                                );
                               },
                               child: const Icon(
                                 Icons.brush_outlined,
