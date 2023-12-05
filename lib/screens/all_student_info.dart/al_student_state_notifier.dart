@@ -4,7 +4,6 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:students/api/api_client.dart';
 import 'package:students/api/api_endpoints.dart';
 import 'package:students/api/api_response/api_response.dart';
-import 'package:students/api/network_resource_state/network_resource_state.dart';
 import 'package:students/models/student_detail.dart';
 import 'package:students/screens/all_student_info.dart/all_student_state.dart';
 

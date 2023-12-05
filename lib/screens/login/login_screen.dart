@@ -1,6 +1,5 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:students/common/core/routes.dart';
 import 'package:students/components/common_button.dart';
 import 'package:students/components/input_form.dart';
 import 'package:students/components/text_form_field.dart';

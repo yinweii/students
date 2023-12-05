@@ -1,9 +1,7 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:percent_indicator/linear_percent_indicator.dart';
 import 'package:students/generated/assets.gen.dart';
-import 'package:students/models/student.dart';
 import 'package:students/models/student_detail.dart';
 import 'package:students/screens/student_detail/student_detail_screen.dart';
 import 'package:students/screens/student_list/components/point_form.dart';

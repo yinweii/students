@@ -1,15 +1,11 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:percent_indicator/linear_percent_indicator.dart';
 import 'package:students/components/common_appbar.dart';
-import 'package:students/components/loading_indicator.dart';
 import 'package:students/generated/assets.gen.dart';
 import 'package:students/screens/all_student_info.dart/al_student_state_notifier.dart';
 import 'package:students/screens/student_detail/student_detail_screen.dart';
-import 'package:students/screens/student_list/components/point_form.dart';
 import 'package:students/utils/app_colors.dart';
 import 'package:students/utils/app_text_style.dart';
-import 'package:students/utils/dialog.dart';
 import 'package:students/utils/utils.dart';
 
 class AllStudentInfoScreen extends ConsumerStatefulWidget {
